@@ -1,0 +1,371 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 5, C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* line 22, C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+html {
+  line-height: 1;
+}
+
+/* line 24, C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 26, C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 28, C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 30, C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 103, C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 32, C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 116, C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+}
+
+/* line 3, D:/DreamChat/src/client/scss/_reset.scss */
+body, optgroup {
+  color: #000;
+  background: #fff;
+}
+
+/* line 7, D:/DreamChat/src/client/scss/_reset.scss */
+body, code, dl, dd, form, pre {
+  margin: 0;
+}
+
+/* line 11, D:/DreamChat/src/client/scss/_reset.scss */
+a:link, a:visited, ins {
+  text-decoration: none;
+}
+
+/* line 14, D:/DreamChat/src/client/scss/_reset.scss */
+a:link img, a:visited img, object, fieldset, abbr, acronym {
+  border: none;
+}
+
+/* line 17, D:/DreamChat/src/client/scss/_reset.scss */
+img {
+  vertical-align: bottom;
+}
+
+/* line 20, D:/DreamChat/src/client/scss/_reset.scss */
+td, th, textarea {
+  vertical-align: top;
+}
+
+/* line 23, D:/DreamChat/src/client/scss/_reset.scss */
+li, a {
+  display: block;
+}
+
+/* line 27, D:/DreamChat/src/client/scss/_reset.scss */
+table {
+  border-collapse: collapse;
+}
+
+/* line 30, D:/DreamChat/src/client/scss/_reset.scss */
+caption, th {
+  text-align: left;
+}
+
+/* line 33, D:/DreamChat/src/client/scss/_reset.scss */
+td, th, nav {
+  padding: 0;
+}
+
+/* line 36, D:/DreamChat/src/client/scss/_reset.scss */
+address, blockquote, h1, h2, h3, h4, h5, h6, fieldset, p, ol, ul, li, textarea {
+  margin: 0;
+  padding: 0;
+}
+
+/* line 40, D:/DreamChat/src/client/scss/_reset.scss */
+th, h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+}
+
+/* line 43, D:/DreamChat/src/client/scss/_reset.scss */
+ul {
+  list-style: none;
+}
+
+/* line 47, D:/DreamChat/src/client/scss/_reset.scss */
+textarea:focus {
+  box-shadow: none;
+}
+
+/* line 51, D:/DreamChat/src/client/scss/_reset.scss */
+.btn:active {
+  box-shadow: none;
+}
+
+/*common*/
+/* line 2, D:/DreamChat/src/client/scss/_common.scss */
+body {
+  color: #434E3C;
+  overflow-x: hidden;
+}
+
+/* line 7, D:/DreamChat/src/client/scss/_common.scss */
+html, body {
+  height: 100%;
+}
+
+/* line 11, D:/DreamChat/src/client/scss/_common.scss */
+.section-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* line 17, D:/DreamChat/src/client/scss/_common.scss */
+a {
+  font-family: 'Open Sans Semibold';
+  font-size: 17px;
+}
+
+/* line 22, D:/DreamChat/src/client/scss/_common.scss */
+.all {
+  min-height: 100%;
+}
+
+/* line 26, D:/DreamChat/src/client/scss/_common.scss */
+.content {
+  position: absolute;
+  bottom: 0;
+  top: 52px;
+  width: 100%;
+  padding-bottom: 110px;
+}
+
+/* line 34, D:/DreamChat/src/client/scss/_common.scss */
+.content-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  height: 100%;
+}
+
+/* line 40, D:/DreamChat/src/client/scss/_common.scss */
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+/* line 48, D:/DreamChat/src/client/scss/_common.scss */
+.errorText i {
+  color: #de3f18;
+}
+
+/*buttons states*/
+/* line 53, D:/DreamChat/src/client/scss/_common.scss */
+.active {
+  display: block;
+}
+
+/* line 57, D:/DreamChat/src/client/scss/_common.scss */
+.active-inline {
+  display: inline-block;
+}
+
+/* line 61, D:/DreamChat/src/client/scss/_common.scss */
+.hidden {
+  display: none;
+}
+
+/* line 65, D:/DreamChat/src/client/scss/_common.scss */
+.hide {
+  visibility: hidden;
+}
+
+/* line 69, D:/DreamChat/src/client/scss/_common.scss */
+.visible {
+  visibility: visible;
+}
+
+/*footer*/
+/* line 75, D:/DreamChat/src/client/scss/_common.scss */
+.footer-inner {
+  position: relative;
+  height: 100px;
+  max-width: 900px;
+  margin: -100px auto;
+}
+
+/* line 1, D:/DreamChat/src/client/scss/_service.scss */
+.service {
+  background: #F5F4EB;
+  border-radius: 6px;
+  padding: 10px 5px;
+  color: #893667;
+}
+
+/* line 7, D:/DreamChat/src/client/scss/_service.scss */
+.service-item {
+  float: left;
+  vertical-align: middle;
+  padding: 5px 20px 0 5px;
+}
+
+/* line 14, D:/DreamChat/src/client/scss/_service.scss */
+.service-item[data-state="initial"] .icon-input {
+  display: none;
+}
+/* line 18, D:/DreamChat/src/client/scss/_service.scss */
+.service-item[data-state="initial"] .icon-text {
+  display: inline-block;
+}
+/* line 22, D:/DreamChat/src/client/scss/_service.scss */
+.service-item[data-state="initial"] .icon.editOff-username {
+  display: none;
+}
+
+/* line 28, D:/DreamChat/src/client/scss/_service.scss */
+.service-item[data-state="edit"] .icon-input {
+  display: inline-block;
+  background-color: #F5F4EB;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+}
+/* line 36, D:/DreamChat/src/client/scss/_service.scss */
+.service-item[data-state="edit"] .icon-text {
+  display: none;
+}
+/* line 40, D:/DreamChat/src/client/scss/_service.scss */
+.service-item[data-state="edit"] .icon.editOn-username {
+  display: none;
+}
+/* line 44, D:/DreamChat/src/client/scss/_service.scss */
+.service-item[data-state="edit"] .icon.editOff-username {
+  display: inline-block;
+}
+
+/* line 49, D:/DreamChat/src/client/scss/_service.scss */
+.icon {
+  font-size: 17px;
+  cursor: pointer;
+  margin-right: 5px;
+  line-height: 30px;
+  vertical-align: middle;
+}
+
+/* line 57, D:/DreamChat/src/client/scss/_service.scss */
+.icon-text {
+  color: #434E3C;
+  height: 30px;
+}
+
+/* line 1, D:/DreamChat/src/client/scss/_chatBox.scss */
+.chatBox_wrap {
+  background: #F5F4EB;
+  height: 100%;
+  padding: 5px;
+}
+
+/* line 8, D:/DreamChat/src/client/scss/_chatBox.scss */
+.chatBox {
+  height: 100%;
+  overflow: auto;
+  border: 1px solid #434E3C;
+  border-radius: 6px;
+}
+
+/* line 1, D:/DreamChat/src/client/scss/_msgBox.scss */
+.msgBox_wrap {
+  background-color: #F5F4EB;
+  padding: 0 5px;
+  box-sizing: border-box;
+  height: 100px;
+  font: 0/0 a;
+}
+
+/* line 9, D:/DreamChat/src/client/scss/_msgBox.scss */
+.msgBox_wrap:before {
+  content: ' ';
+  display: inline-block;
+  vertical-align: middle;
+  /* vertical alignment of the inline element */
+  height: 100%;
+}
+
+/* line 16, D:/DreamChat/src/client/scss/_msgBox.scss */
+.msgBox {
+  position: relative;
+  width: 100%;
+  height: 62px;
+  border: 1px solid #434E3C;
+  border-radius: 6px;
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0 5px;
+}
+/* line 27, D:/DreamChat/src/client/scss/_msgBox.scss */
+.msgBox .btn {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  margin-top: -15px;
+  color: #893667;
+  background: #F5F4EB;
+  font-size: 22px;
+  border: none;
+}
+
+/* line 39, D:/DreamChat/src/client/scss/_msgBox.scss */
+.msgBox_textarea {
+  width: 100%;
+  background-color: initial;
+  outline: 0px none transparent;
+  border: none;
+  resize: none;
+  line-height: 60px;
+  height: 60px;
+}

@@ -1,0 +1,108 @@
+.msg{
+    padding: 5px;
+}
+
+.msg-content{
+    display: inline-block;
+}
+
+.msg.other .msg-text{
+    background-color: #cc6699;
+}
+
+.msg.other .msg-text:before{
+    border-right-color: #cc6699;
+}
+
+.msg-text{
+    position: relative;
+    display: inline-block;
+    margin-left: 10px;
+    border-radius: 5px;
+    background-color: #893667;
+    padding: 10px;
+    color: #fff;
+    max-width: 70%;
+}
+
+.msg-text:before{
+    content: " ";
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    margin-top: -11px;
+    width: 0px;
+    height: 0px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid #893667;
+}
+
+.msg-time{
+    display: inline-block;
+}
+
+.other{
+    text-align: right;
+}
+
+/*new state*/
+.msg[data-state="new"] .icon.edit, 
+.msg[data-state="new"] .msg-text, 
+.msg[data-state="new"] .icon.delete{
+    display: inline-block;
+}
+
+.msg[data-state="new"] .msg-editedText,
+.msg[data-state="new"] .icon.complete, 
+.msg[data-state="new"] .icon.cancel{
+    display: none;
+}
+/*edited Other state*/
+
+.msg[data-state="edited"].other .icon.edit, 
+.msg[data-state="edited"].other .icon.delete {
+    display: none;    
+}
+
+.msg[data-state="edited"] .msg-editedText, 
+.msg[data-state="edited"] .icon.complete,
+.msg[data-state="edited"] .icon.cancel{
+    display: none;
+}
+
+.msg[data-state="edited"] .icon.edit, 
+.msg[data-state="edited"] .icon.delete, 
+.msg[data-state="edited"] .msg-text{
+    display: inline-block;
+} 
+
+/*initial Other state*/
+.msg[data-state="new"].other .icon.edit, 
+.msg[data-state="new"].other .icon.delete{
+    display: none;
+}
+
+/*edit state*/
+.msg[data-state="edit"] .msg-editedText, 
+.msg[data-state="edit"] .icon.complete, 
+.msg[data-state="edit"] .icon.cancel{
+    display: inline-block;
+}
+.msg[data-state="edit"] .icon.edit, 
+.msg[data-state="edit"] .msg-text, 
+.msg[data-state="edit"] .icon.delete{
+    display: none;
+}
+
+/*deleted state*/
+.msg[data-state="deleted"] .msg-editedText, 
+.msg[data-state="deleted"] .icon.edit, 
+.msg[data-state="deleted"] .icon.complete, 
+.msg[data-state="deleted"] .icon.delete, 
+.msg[data-state="deleted"] .icon.cancel{
+    display: none;
+}
+.msg[data-state="deleted"] .msg-text{
+     display: inline-block;
+}

@@ -1,0 +1,80 @@
+/*common*/
+body{
+    color: #434E3C;
+    overflow-x: hidden;
+}
+
+html,body {
+	height: 100%;
+}
+
+.section-inner {
+	max-width: 900px;
+	margin: 0 auto;
+	
+}
+
+a {
+	font-family: 'Open Sans Semibold';	
+    font-size: 17px;
+}
+
+.all {
+    min-height: 100%;
+}
+
+.content {
+	position: absolute;
+    bottom: 0;
+    top: 52px;
+    width: 100%;
+    padding-bottom: 110px;
+}
+
+.content-inner{
+    max-width: 900px;
+    margin: 0 auto;
+    height: 100%;
+}
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;	
+}
+
+.errorText i{
+	color: #de3f18;
+}
+
+/*buttons states*/
+.active{
+	display: block;
+}
+
+.active-inline{
+	display: inline-block;
+}
+
+.hidden{
+	display: none;
+}
+
+.hide {
+	visibility: hidden;
+}
+
+.visible{
+	visibility: visible;
+}
+
+/*footer*/
+
+.footer-inner{
+	position: relative;
+    height: 100px;
+    max-width: 900px;
+    margin: -100px auto;
+}
