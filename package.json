@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "browserify": "^13.1.1",
     "ecstatic": "*"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "browserify src/client/js/app.js -o src/client/js/bundle.js"
   },
   "repository": {
     "type": "git",

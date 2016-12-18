@@ -12,4 +12,7 @@ var appState = {
     token: ''
 }
 
-module.exports = appState;
+module.exports = {
+    appState:appState,
+    uniqueId:uniqueId
+};

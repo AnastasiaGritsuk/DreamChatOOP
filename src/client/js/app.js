@@ -4,20 +4,17 @@ document.addEventListener('click', delegateEvent);
 var historyBox = document.getElementById('chatBoxId');
 var inputUsername = document.getElementsByClassName('icon-input')[0];
 var username = document.getElementById('username');
-
-var AppStateModel = require('./app');
-var appState = new AppStateModel();
+document.addEventListener("DOMContentLoaded", run);
+var appStateModel = require('./appState');
+var appState = appStateModel.appState;
 
 var theMessage = function(text){
     return {
-        id: uniqueId(),
+        id: appStateModel.uniqueId(),
         text:text,
         user: appState.user
     }
 }
-
-
-
 
 
 function delegateEvent(evtObj){
