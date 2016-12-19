@@ -5,6 +5,10 @@ var uniqueId = function() {
     return Math.floor(date * random).toString();
 };
 
+function isCurrentUser(user){
+    return user != appState.user;
+}
+
 var appState = {
     user: 'User' + uniqueId(),
     mainUrl: 'http://localhost:8080/chat',
@@ -14,5 +18,6 @@ var appState = {
 
 module.exports = {
     appState:appState,
-    uniqueId:uniqueId
+    uniqueId:uniqueId,
+    isCurrentUser:isCurrentUser
 };

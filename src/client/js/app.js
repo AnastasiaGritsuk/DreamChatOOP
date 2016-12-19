@@ -1,12 +1,15 @@
 var sendButton = document.getElementById('sendButton');
 var newMessageBox = document.getElementById('msgBox_textareaId');
 document.addEventListener('click', delegateEvent);
-var historyBox = document.getElementById('chatBoxId');
+
 var inputUsername = document.getElementsByClassName('icon-input')[0];
 var username = document.getElementById('username');
 document.addEventListener("DOMContentLoaded", run);
+
 var appStateModel = require('./appState');
 var appState = appStateModel.appState;
+
+var appViewRender = require('./render');
 
 var theMessage = function(text){
     return {
@@ -72,7 +75,7 @@ function run(){
         appState.token = chunk.token;
         syncHistory(chunk.messages, function(needToRender){
             if(needToRender)
-                render(appState);    
+                appViewRender(appStateModel);    
         });
     });
 }
@@ -187,75 +190,13 @@ function syncHistory(newMsg, callback){
     callback(true);
 }
 
-function render(appState){
-    if(appState.history.length === 0)
-        return;
 
-    var msgMap = appState.history.reduce(function(accumulator, msg){
-        accumulator[msg.id] = msg;
 
-        return accumulator;
-    },{});
 
-    updateList(historyBox, msgMap);
-    appendToList(historyBox, appState.history, msgMap);
-}
 
-function updateList(element, msgMap){
-    var children = element.children;
 
-    for(var i=0;i<children.length;i++){
-        var child = children[i];
-        var id = child.attributes['id'].value;
-        var item = msgMap[id];
-        renderItemState(child.shadowRoot.children[1], item);
-        msgMap[id] = null;      
-    }
-}
 
-function appendToList(element, items, msgMap){
-    for(var i=0; i<items.length; i++){
-        var item = items[i];
 
-        if(msgMap[item.id] == null)
-            continue;
-
-        msgMap[item.id] = null;
-
-        var msgWpapper = document.createElement('div');
-        msgWpapper.setAttribute('id', item.id);
-        historyBox.appendChild(msgWpapper);
-
-        var root1 = document.getElementById(item.id).createShadowRoot();
-        var template = msgFromTemplate(isCurrentUser(item.user));
-        renderItemState(template.children[1], item);
-
-        root1.appendChild(template);
-    }
-}
-
-function isCurrentUser(user){
-    return user != appState.user;
-}
-
-function msgFromTemplate(mode){
-    var template = document.getElementById('msg-template');
-    var clone = document.importNode(template.content, true);
-
-    if(mode){
-        clone.children[1].classList.add('other');
-    }
-     
-    return clone;
-}
-
-function renderItemState(item, message){
-    item.setAttribute('id', message.id);
-    item.dataset.state = message.status;
-    item.getElementsByClassName('msg-username')[0].innerHTML = message.user;
-    item.getElementsByClassName('msg-text')[0].innerHTML = message.text;
-    item.getElementsByClassName('msg-time')[0].innerHTML = message.time;
-}
 
 function ajax(method, url, data, continueWith, continueWithError){
     var xhr = new XMLHttpRequest();
