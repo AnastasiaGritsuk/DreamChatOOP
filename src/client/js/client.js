@@ -1,11 +1,15 @@
 var newMessageBox = document.getElementById('msgBox_textareaId');
+var sendButton = document.getElementById('sendButton');
+var inputUsername = document.getElementsByClassName('icon-input')[0];
+var username = document.getElementById('username');
 var appStateModel = require('./appState');
 
 newMessageBox.addEventListener('keypress', function(evtObj){
     //showTypeheads();
 
     if(iskeyCode13(evtObj)){
-        onSendButtonClick(evtObj,true);
+        console.log(evtObj);
+        onSendButtonClick(evtObj.target.nextElementSibling,true);
         evtObj.preventDefault();
     }
     return false;
@@ -24,19 +28,15 @@ function ajax(method, url, data, continueWith, continueWithError, defaultErrorHa
     xhr.onload = function(){
         if(xhr.readyState !==4)
             return;
-
         if(xhr.status !=200){
             continueWithError('Error on the server side, response ' + xhr.status);
             return;
         }
-
         if(isError(xhr.responseText)) {
             continueWithError('Error on the server side, response ' + xhr.responseText);
             return;
         }
-
         continueWith(xhr.responseText);
-
     };
 
     xhr.ontimeout = function(){
@@ -53,9 +53,7 @@ function ajax(method, url, data, continueWith, continueWithError, defaultErrorHa
 
         continueWithError(errMsg);
     };
-
     xhr.send(data);
-
 }
 
 var theMessage = function(text){
@@ -71,7 +69,6 @@ function syncHistory(appState,newMsg, callback){
         callback();
         return;
     }
-
     var msgMap = appState.history.reduce(function(accumulator, msg){
         accumulator[msg.id] = msg;
 
@@ -99,24 +96,14 @@ function onSendButtonClick(element,enterkey){
         return false;
 
     element.setAttribute('disabled', 'disabled');
-
     var newMessage = theMessage(newMessageBox.value);
-
     if(newMessageBox.value == '')
         return;
 
     newMessageBox.value = '';
 
-    sendMessage(newMessage, function(){
+    ajax('POST', appStateModel.appState.mainUrl, JSON.stringify(newMessage), function(){
         element.removeAttribute('disabled');
-    });
-}
-
-function sendMessage(message, continueWith){
-    var xhr = new XMLHttpRequest();
-
-    ajax('POST', appStateModel.appState.mainUrl, JSON.stringify(message), function(response){
-        continueWith();
     });
 }
 
@@ -124,7 +111,6 @@ function onEditClick(evtObj){
     sendButton.setAttribute('disabled', 'disabled');
     var current = evtObj.target.shadowRoot.children[1];
     current.dataset.state = "edit";
-
 }
 
 function onEditComplete(evtObj){
@@ -134,10 +120,10 @@ function onEditComplete(evtObj){
     var updatedMessage = {
         id: current.id,
         text: input.value,
-        user: appState.user
+        user: appStateModel.appState.user
     }
 
-    ajax('PUT', appState.mainUrl, JSON.stringify(updatedMessage), function(){
+    ajax('PUT', appStateModel.appState.mainUrl, JSON.stringify(updatedMessage), function(){
         sendButton.removeAttribute('disabled');
     });
 }
@@ -146,7 +132,7 @@ function onDeleteClick(evtObj){
     sendButton.setAttribute('disabled', 'disabled');
     var current = evtObj.target;
 
-    ajax('DELETE', appState.mainUrl + '/'  + 'delete(' + current.id + ')', null, function(){
+    ajax('DELETE', appStateModel.appState.mainUrl + '/'  + 'delete(' + current.id + ')', null, function(){
         sendButton.removeAttribute('disabled');
     });
 }
@@ -161,7 +147,7 @@ function onEditUsernameClick(evtObj){
 }
 
 function onEditCompleteUsernameClick(evtObj){
-    appState.user = inputUsername.value;
+    appStateModel.appState.user = inputUsername.value;
     loadUser();
     evtObj.path[2].dataset.state = "initial";
 }
@@ -179,9 +165,15 @@ function isError(text){
     return !!obj.error;
 }
 
+function loadUser(){
+    var user = appStateModel.appState.user;
+    appStateModel.appState.user = user;
+    username.innerHTML = appStateModel.appState.user;
+}
 
 module.exports = {
     ajax:ajax,
+    loadUser:loadUser,
     syncHistory:syncHistory,
     onSendButtonClick:onSendButtonClick,
     onEditClick:onEditClick,
