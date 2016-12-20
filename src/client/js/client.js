@@ -1,6 +1,21 @@
+var newMessageBox = document.getElementById('msgBox_textareaId');
+var appStateModel = require('./appState');
 
+newMessageBox.addEventListener('keypress', function(evtObj){
+    //showTypeheads();
 
-function ajax(method, url, data, continueWith, continueWithError){
+    if(iskeyCode13(evtObj)){
+        onSendButtonClick(evtObj,true);
+        evtObj.preventDefault();
+    }
+    return false;
+});
+
+function iskeyCode13(evtObj) {
+    return evtObj.keyCode == 13;
+}
+
+function ajax(method, url, data, continueWith, continueWithError, defaultErrorHandler){
     var xhr = new XMLHttpRequest();
 
     continueWithError = continueWithError || defaultErrorHandler;
@@ -47,7 +62,7 @@ var theMessage = function(text){
     return {
         id: appStateModel.uniqueId(),
         text:text,
-        user: appState.user
+        user: appStateModel.appState.user
     }
 }
 
@@ -79,11 +94,11 @@ function syncHistory(appState,newMsg, callback){
     callback(true);
 }
 
-function onSendButtonClick(enterkey){
-    if(sendButton.getAttribute('disabled') && enterkey)
+function onSendButtonClick(element,enterkey){
+    if(element.getAttribute('disabled') && enterkey)
         return false;
 
-    sendButton.setAttribute('disabled', 'disabled');
+    element.setAttribute('disabled', 'disabled');
 
     var newMessage = theMessage(newMessageBox.value);
 
@@ -93,14 +108,14 @@ function onSendButtonClick(enterkey){
     newMessageBox.value = '';
 
     sendMessage(newMessage, function(){
-        sendButton.removeAttribute('disabled');
+        element.removeAttribute('disabled');
     });
 }
 
 function sendMessage(message, continueWith){
     var xhr = new XMLHttpRequest();
 
-    ajax('POST', appState.mainUrl, JSON.stringify(message), function(response){
+    ajax('POST', appStateModel.appState.mainUrl, JSON.stringify(message), function(response){
         continueWith();
     });
 }
@@ -151,8 +166,22 @@ function onEditCompleteUsernameClick(evtObj){
     evtObj.path[2].dataset.state = "initial";
 }
 
+function isError(text){
+    if(text == "")
+        return false;
+
+    try{
+        var obj = JSON.parse(text);
+    }catch(ex){
+        return true;
+    }
+
+    return !!obj.error;
+}
+
 
 module.exports = {
+    ajax:ajax,
     syncHistory:syncHistory,
     onSendButtonClick:onSendButtonClick,
     onEditClick:onEditClick,

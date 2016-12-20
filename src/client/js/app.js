@@ -1,5 +1,5 @@
-var sendButton = document.getElementById('sendButton');
-var newMessageBox = document.getElementById('msgBox_textareaId');
+//var sendButton = document.getElementById('sendButton');
+
 document.addEventListener('click', delegateEvent);
 
 var inputUsername = document.getElementsByClassName('icon-input')[0];
@@ -43,7 +43,12 @@ function delegateEvent(evtObj){
     if(evtObj.type == 'click' && isProperElement(evtObj, 'icon editOff-username')) {
         client.onEditCompleteUsernameClick(evtObj);
         return;
-    }  
+    }
+
+    if(evtObj.type == 'click' && isProperElement(evtObj, 'btn sendButton')) {
+        client.onSendButtonClick(evtObj.path[1], false);
+        return;
+    }
 }
 
 function isProperElement(e, classname){
@@ -52,21 +57,11 @@ function isProperElement(e, classname){
 
 function run(){
     loadUser();
-    newMessageBox.addEventListener('keypress', function(e){
+    
 
-        showTypeheads();
-
-        if(e.keyCode == 13){
-            client.onSendButtonClick(true);
-            e.preventDefault();
-        }
-        
-        return false;
-    });
-
-    sendButton.addEventListener('click', function() {
-        client.onSendButtonClick();
-    });
+    // sendButton.addEventListener('click', function() {
+    //     client.onSendButtonClick();
+    // });
     doPolling(function(chunk){
         appState.token = chunk.token;
         client.syncHistory(appState,chunk.messages, function(needToRender){
@@ -82,7 +77,6 @@ function loadUser(){
     username.innerHTML = appState.user;
 }
 
-f
 function doPolling(callback){
     function loop(){
         var xhr = new XMLHttpRequest();
@@ -92,14 +86,11 @@ function doPolling(callback){
             callback(answer);
 
             setTimeout(loop, 1000);
-        });
+        }, null, defaultErrorHandler);
     }
 
     loop();
 }
-
-
-
 
 window.onerror = function(err) {
    // output(err.toString());
@@ -108,20 +99,6 @@ window.onerror = function(err) {
 
 function defaultErrorHandler(message){
     console.error(message);
-    // output(message);
-}
-
-function isError(text){
-    if(text == "")
-        return false;
-
-    try{
-        var obj = JSON.parse(text);
-    }catch(ex){
-        return true;
-    }
-
-    return !!obj.error;
 }
 
 //change server
