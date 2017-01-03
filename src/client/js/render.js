@@ -1,3 +1,15 @@
+var app = require('./app');
+var Emitter = require('component-emitter');
+var emitter = new Emitter;
+
+document.addEventListener("DOMContentLoaded", function () {
+    emitter.emit('DOMContentLoaded');
+});
+document.addEventListener('click', function (evtObj) {
+    emitter.emit('clickOnDom', evtObj);
+});
+
+
 var historyBox = document.getElementById('chatBoxId');
 
 function render(appStateModel){
@@ -66,4 +78,7 @@ function renderItemState(item, message){
     item.getElementsByClassName('msg-time')[0].innerHTML = message.time;
 }
 
-module.exports = render;
+module.exports = {
+    render:render,
+    emitter:emitter
+};

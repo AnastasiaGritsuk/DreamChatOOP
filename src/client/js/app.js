@@ -1,11 +1,12 @@
-document.addEventListener('click', delegateEvent);
-document.addEventListener("DOMContentLoaded", run);
-
 var appStateModel = require('./appState');
 var appState = appStateModel.appState;
-
-var appViewRender = require('./render');
+var appViewRender = require('./render').render;
 var client = require('./client');
+var emitter = require('./render').emitter;
+emitter.on('DOMContentLoaded', run);
+emitter.on('clickOnDom', function(evtObj){
+    delegateEvent(evtObj);
+});
 
 function delegateEvent(evtObj){
     if(evtObj.type == 'click' && isProperElement(evtObj, 'icon edit')) {
