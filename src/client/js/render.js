@@ -11,7 +11,7 @@ function render(appStateModel){
     },{});
 
     updateList(historyBox, msgMap);
-    appendToList(historyBox, appStateModel.appState.history, msgMap, appStateModel.isCurrentUser);
+    appendToList(historyBox, appStateModel.appState.history, msgMap, appStateModel.isLocalUser);
 }
 
 function updateList(element, msgMap){
@@ -26,7 +26,7 @@ function updateList(element, msgMap){
     }
 }
 
-function appendToList(element, items, msgMap, isCurrentUser){
+function appendToList(element, items, msgMap, isLocalUser){
     for(var i=0; i<items.length; i++){
         var item = items[i];
 
@@ -40,7 +40,7 @@ function appendToList(element, items, msgMap, isCurrentUser){
         element.appendChild(msgWpapper);
 
         var root1 = document.getElementById(item.id).createShadowRoot();
-        var template = msgFromTemplate(isCurrentUser(item.user));
+        var template = msgFromTemplate(isLocalUser(item.user));
         renderItemState(template.children[1], item);
 
         root1.appendChild(template);

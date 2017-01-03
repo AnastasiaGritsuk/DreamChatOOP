@@ -5,7 +5,7 @@ var uniqueId = function() {
     return Math.floor(date * random).toString();
 };
 
-function isCurrentUser(user){
+function isLocalUser(user){
     return user != appState.user;
 }
 
@@ -19,5 +19,5 @@ var appState = {
 module.exports = {
     appState:appState,
     uniqueId:uniqueId,
-    isCurrentUser:isCurrentUser
+    isLocalUser:isLocalUser
 };
