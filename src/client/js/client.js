@@ -1,8 +1,11 @@
-var newMessageBox = document.getElementById('msgBox_textareaId');
-var sendButton = document.getElementById('sendButton');
-var inputUsername = document.getElementsByClassName('icon-input')[0];
-var username = document.getElementById('username');
 var appStateModel = require('./appState');
+var Emitter = require('component-emitter');
+var emitter = new Emitter;
+
+emitter.on('sendButtonClick', onSendButtonClick);
+emitter.on('editCompleteClick', onEditComplete);
+emitter.on('deleteClick', onDeleteClick);
+
 
 newMessageBox.addEventListener('keypress', function(evtObj){
     //showTypeheads();
@@ -91,11 +94,8 @@ function syncHistory(appState,newMsg, callback){
     callback(true);
 }
 
-function onSendButtonClick(element,enterkey){
-    if(element.getAttribute('disabled') && enterkey)
-        return false;
-
-    element.setAttribute('disabled', 'disabled');
+function onSendButtonClick(fn){
+    fn();
     var newMessage = theMessage(newMessageBox.value);
     if(newMessageBox.value == '')
         return;
@@ -105,12 +105,6 @@ function onSendButtonClick(element,enterkey){
     ajax('POST', appStateModel.appState.mainUrl, JSON.stringify(newMessage), function(){
         element.removeAttribute('disabled');
     });
-}
-
-function onEditClick(evtObj){
-    sendButton.setAttribute('disabled', 'disabled');
-    var current = evtObj.target.shadowRoot.children[1];
-    current.dataset.state = "edit";
 }
 
 function onEditComplete(evtObj){
@@ -137,20 +131,9 @@ function onDeleteClick(evtObj){
     });
 }
 
-function onEditCancelClick(evtObj){
-    evtObj.target.shadowRoot.children[1].dataset.state = "new";
-}
 
-function onEditUsernameClick(evtObj){
-    evtObj.path[2].dataset.state = "edit";
-    inputUsername.focus();
-}
 
-function onEditCompleteUsernameClick(evtObj){
-    appStateModel.appState.user = inputUsername.value;
-    loadUser();
-    evtObj.path[2].dataset.state = "initial";
-}
+
 
 function isError(text){
     if(text == "")

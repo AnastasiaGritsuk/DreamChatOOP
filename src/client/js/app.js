@@ -1,53 +1,10 @@
 var appStateModel = require('./appState');
 var appState = appStateModel.appState;
-var appViewRender = require('./render').render;
 var client = require('./client');
+var appViewRender = require('./render').render;
 var emitter = require('./render').emitter;
+
 emitter.on('DOMContentLoaded', run);
-emitter.on('clickOnDom', function(evtObj){
-    delegateEvent(evtObj);
-});
-
-function delegateEvent(evtObj){
-    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon edit')) {
-        client.onEditClick(evtObj);
-        return;
-    }
-
-    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon cancel')) {
-        client.onEditCancelClick(evtObj);
-        return;
-    }
-
-    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon delete')) {
-        client.onDeleteClick(evtObj);
-        return;
-    }
-
-    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon complete')) {
-        client.onEditComplete(evtObj);
-        return;
-    }
-
-    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon editOn-username')) {
-        client.onEditUsernameClick(evtObj);
-        return;
-    }
-
-    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon editOff-username')) {
-        client.onEditCompleteUsernameClick(evtObj);
-        return;
-    }
-
-    if(evtObj.type == 'click' && isProperElement(evtObj, 'btn sendButton')) {
-        client.onSendButtonClick(evtObj.path[1], false);
-        return;
-    }
-}
-
-function isProperElement(e, classname){
-    return e.path[1].className === classname;
-}
 
 function run(){
     client.loadUser();

@@ -6,9 +6,86 @@ document.addEventListener("DOMContentLoaded", function () {
     emitter.emit('DOMContentLoaded');
 });
 document.addEventListener('click', function (evtObj) {
-    emitter.emit('clickOnDom', evtObj);
+    delegateEvent(evtObj);
 });
 
+var newMessageBox = document.getElementById('msgBox_textareaId');
+var sendButton = document.getElementById('sendButton');
+var inputUsername = document.getElementsByClassName('icon-input')[0];
+var username = document.getElementById('username');
+
+function delegateEvent(evtObj){
+    if(evtObj.type == 'click' && isProperElement(evtObj, 'btn sendButton')) {
+        emitter.emit('sendButtonClick', function (element, enterKey) {
+            if(element.getAttribute('disabled') && enterKey)
+                return false;
+
+            element.setAttribute('disabled', 'disabled');
+
+            var newMessage = theMessage(newMessageBox.value);
+            if(newMessageBox.value == '')
+                return;
+
+            newMessageBox.value = '';
+        });
+        return;
+    }
+    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon edit')) {
+        emitter.emit('editClick');
+        return;
+    }
+    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon cancel')) {
+        emitter.emit('editCancelClick');
+        return;
+    }
+    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon complete')) {
+        emitter.emit('editCompleteClick');
+        return;
+    }
+    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon delete')) {
+        emitter.emit('deleteClick');
+        return;
+    }
+    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon editOn-username')) {
+        emitter.emit('editUsernameClick');
+        return;
+    }
+
+    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon editOff-username')) {
+        emitter.emit('editCompleteUsernameClick');
+        return;
+    }
+}
+
+function isProperElement(e, classname){
+    return e.path[1].className === classname;
+}
+
+emitter.on('editClick', onEditClick);
+emitter.on('editCancelClick', onEditCancelClick);
+emitter.on('editUsernameClick', onEditUsernameClick);
+emitter.on('editCompleteUsernameClick', onEditCompleteUsernameClick);
+
+function onEditClick(evtObj){
+    sendButton.setAttribute('disabled', 'disabled');
+    var current = evtObj.target.shadowRoot.children[1];
+    current.dataset.state = "edit";
+}
+
+function onEditCancelClick(evtObj){
+    evtObj.target.shadowRoot.children[1].dataset.state = "new";
+}
+
+function onEditUsernameClick(evtObj){
+    evtObj.path[2].dataset.state = "edit";
+    inputUsername.focus();
+}
+
+function onEditCompleteUsernameClick(evtObj){
+    appStateModel.appState.user = inputUsername.value;
+    loadUser();
+    evtObj.path[2].dataset.state = "initial";
+}
 
 var historyBox = document.getElementById('chatBoxId');
 
