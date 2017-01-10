@@ -7,7 +7,6 @@ function DocumentView() {
     this.username = document.getElementById('username');
     this.sendButton = document.getElementById('sendButton');
     this.newMessageBox = document.getElementById('msgBox_textareaId');
-
     document.addEventListener('click', this.delegateEvent);
 }
 

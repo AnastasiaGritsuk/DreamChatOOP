@@ -1,5 +1,5 @@
 var appState = require('./app-state');
-var documentView = require('./documentView');
+var documentView = require('./documentView2');
 var Emitter = require('component-emitter');
 var emitter = new Emitter;
 
