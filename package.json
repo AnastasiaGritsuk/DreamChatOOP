@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "browserify": "^13.3.0",
+    "component-emitter": "github:component/emitter",
     "ecstatic": "*"
   },
   "devDependencies": {},

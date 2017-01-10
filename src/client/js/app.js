@@ -1,54 +1,21 @@
 var appState = require('./app-state');
+var documentView = require('./documentView');
+var Emitter = require('component-emitter');
+var emitter = new Emitter;
 
-var sendButton = document.getElementById('sendButton');
-var newMessageBox = document.getElementById('msgBox_textareaId');
-
-document.addEventListener('click', delegateEvent);
 document.addEventListener("DOMContentLoaded", run);
 
-var historyBox = document.getElementById('chatBoxId');
-var inputUsername = document.getElementsByClassName('icon-input')[0];
-var username = document.getElementById('username');
-
-function delegateEvent(evtObj){
-    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon edit')) {
-        onEditClick(evtObj);
-        return;
-    }
-
-    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon cancel')) {
-        onEditCancelClick(evtObj);
-        return;
-    }
-
-    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon delete')) {
-        onDeleteClick(evtObj);
-        return;
-    }
-
-    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon complete')) {
-        onEditComplete(evtObj);
-        return;
-    }
-
-    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon editOn-username')) {
-        onEditUsernameClick(evtObj);
-        return;
-    }
-
-    if(evtObj.type == 'click' && isProperElement(evtObj, 'icon editOff-username')) {
-        onEditCompleteUsernameClick(evtObj);
-        return;
-    }  
-}
-
-function isProperElement(e, classname){
-    return e.path[1].className === classname;
-}
+emitter.on('sendButtonClick', onSendButtonClick);
+emitter.on('editCompleteClick', onEditComplete);
+emitter.on('deleteClick', onDeleteClick);
+emitter.on('editClick', onEditClick);
+emitter.on('editCancelClick', onEditCancelClick);
+emitter.on('editUsernameClick', onEditUsernameClick);
+emitter.on('editCompleteUsernameClick', onEditCompleteUsernameClick);
 
 function run(){
     loadUser();
-    newMessageBox.addEventListener('keypress', function(e){
+    documentView.newMessageBox.addEventListener('keypress', function(e){
 
         showTypeheads();
 
@@ -60,7 +27,7 @@ function run(){
         return false;
     });
 
-    sendButton.addEventListener('click', onSendButtonClick);
+    documentView.sendButton.addEventListener('click', onSendButtonClick);
     doPolling(function(chunk){
         appState.token = chunk.token;
         syncHistory(chunk.messages, function(needToRender){
@@ -73,37 +40,35 @@ function run(){
 function loadUser(){
     var user = appState.user;
     appState.user = user;
-    username.innerHTML = appState.user;
+    documentView.username.innerHTML = appState.user;
 }
 
 function onSendButtonClick(enterkey){
-    if(sendButton.getAttribute('disabled') && enterkey)
+    if(documentView.sendButton.getAttribute('disabled') && enterkey)
         return false;
 
-    sendButton.setAttribute('disabled', 'disabled');
+    documentView.sendButton.setAttribute('disabled', 'disabled');
 
-    var newMessage = appState.theMessage(newMessageBox.value);
+    var newMessage = appState.theMessage(documentView.newMessageBox.value);
 
-    if(newMessageBox.value == '')
+    if(documentView.newMessageBox.value == '')
         return;
 
-    newMessageBox.value = '';
+    documentView.newMessageBox.value = '';
 
     sendMessage(newMessage, function(){
-        sendButton.removeAttribute('disabled');
+        documentView.sendButton.removeAttribute('disabled');
     });
 }
 
 function sendMessage(message, continueWith){
-    var xhr = new XMLHttpRequest();
-
     ajax('POST', appState.mainUrl, JSON.stringify(message), function(response){
         continueWith();
     });
 }
 
 function onEditClick(evtObj){
-    sendButton.setAttribute('disabled', 'disabled');
+    documentView.sendButton.setAttribute('disabled', 'disabled');
     var current = evtObj.target.shadowRoot.children[1];
     current.dataset.state = "edit"; 
 
@@ -120,16 +85,16 @@ function onEditComplete(evtObj){
     }
 
     ajax('PUT', appState.mainUrl, JSON.stringify(updatedMessage), function(){
-        sendButton.removeAttribute('disabled');
+        documentView.sendButton.removeAttribute('disabled');
     });
 }
 
 function onDeleteClick(evtObj){
-    sendButton.setAttribute('disabled', 'disabled');
+    documentView.sendButton.setAttribute('disabled', 'disabled');
     var current = evtObj.target;
 
     ajax('DELETE', appState.mainUrl + '/'  + 'delete(' + current.id + ')', null, function(){
-       sendButton.removeAttribute('disabled');
+       documentView.sendButton.removeAttribute('disabled');
     });
 }
 
@@ -190,8 +155,8 @@ function render(appState){
         return accumulator;
     },{});
 
-    updateList(historyBox, msgMap);
-    appendToList(historyBox, appState.history, msgMap);
+    updateList(documentView.historyBox, msgMap);
+    appendToList(documentView.historyBox, appState.history, msgMap);
 }
 
 function updateList(element, msgMap){
@@ -217,7 +182,7 @@ function appendToList(element, items, msgMap){
 
         var msgWpapper = document.createElement('div');
         msgWpapper.setAttribute('id', item.id);
-        historyBox.appendChild(msgWpapper);
+        documentView.historyBox.appendChild(msgWpapper);
 
         var root1 = document.getElementById(item.id).createShadowRoot();
         var template = msgFromTemplate(isCurrentUser(item.user));
@@ -318,11 +283,11 @@ function isError(text){
 
 function onEditUsernameClick(evtObj){
    evtObj.path[2].dataset.state = "edit";
-   inputUsername.focus();
+   documentView.inputUsername.focus();
 }
 
 function onEditCompleteUsernameClick(evtObj){
-    appState.user = inputUsername.value;
+    appState.user = documentView.inputUsername.value;
     loadUser();
     evtObj.path[2].dataset.state = "initial";
 }
