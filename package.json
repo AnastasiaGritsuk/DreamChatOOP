@@ -4,20 +4,17 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "browserify": "^13.3.0",
     "ecstatic": "*"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "browserify src/client/js/app.js -o src/client/js/bundle.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AnastasiaGritsuk/DreamChat.git"
   },
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/AnastasiaGritsuk/DreamChat/issues"
-  },
-  "homepage": "https://github.com/AnastasiaGritsuk/DreamChat#readme"
+  "license": "ISC"
 }

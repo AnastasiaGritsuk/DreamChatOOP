@@ -1,31 +1,14 @@
+var appState = require('./app-state');
+
 var sendButton = document.getElementById('sendButton');
 var newMessageBox = document.getElementById('msgBox_textareaId');
+
 document.addEventListener('click', delegateEvent);
+document.addEventListener("DOMContentLoaded", run);
+
 var historyBox = document.getElementById('chatBoxId');
 var inputUsername = document.getElementsByClassName('icon-input')[0];
 var username = document.getElementById('username');
-
-var theMessage = function(text){
-    return {
-        id: uniqueId(),
-        text:text,
-        user: appState.user
-    }
-}
-
-var uniqueId = function() {
-    var date = Date.now();
-    var random = Math.random() * Math.random();
-
-    return Math.floor(date * random).toString();
-};
-
-var appState = {
-    user: 'User' + uniqueId(),
-    mainUrl: 'http://localhost:8080/chat',
-    history:[],
-    token: ''
-}
 
 function delegateEvent(evtObj){
     if(evtObj.type == 'click' && isProperElement(evtObj, 'icon edit')) {
@@ -99,7 +82,7 @@ function onSendButtonClick(enterkey){
 
     sendButton.setAttribute('disabled', 'disabled');
 
-    var newMessage = theMessage(newMessageBox.value);
+    var newMessage = appState.theMessage(newMessageBox.value);
 
     if(newMessageBox.value == '')
         return;
