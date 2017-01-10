@@ -38,10 +38,6 @@ History.prototype.delete = function(id, callback){
 	callback();
 }
 
-History.prototype.length = function () {
-	return this.messageHistory.length;
-}
-
 function getDateTime() {
 
     var date = new Date();

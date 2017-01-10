@@ -2,9 +2,9 @@ var http = require('http');
 var ecstatic = require('ecstatic');
 var handler = ecstatic({ root: '../client', handleError:false });
 var url = require('url');
-var History = require('./history');
+var HistoryModule = require('./history');
 
-var history = new History();
+var history = new HistoryModule();
 
 http.createServer(function(request, response) {
 	if(isMy(request.url) != -1){
@@ -38,7 +38,7 @@ function extractToken(str){
 	var token = str.split('?')[1].split('=')[1];
 
 	if(token === ''){
-		token = history.length();	
+		token = history.messageHistory.length;	
 	}
 
 	return token;
