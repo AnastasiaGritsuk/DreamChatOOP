@@ -6,18 +6,6 @@ emitter.on('sendButtonClick', onSendButtonClick);
 emitter.on('editCompleteClick', onEditComplete);
 emitter.on('deleteClick', onDeleteClick);
 
-function Client() {
-    this.theMessage = function(text){
-        return {
-            id: appStateModel.uniqueId(),
-            text:text,
-            user: appStateModel.appState.user
-        }
-    }
-}
-
-Client.prototype.ajax = ajax;
-Client.prototype.syncHistory = syncHistory;
 
 newMessageBox.addEventListener('keypress', function(evtObj){
     //showTypeheads();
@@ -71,6 +59,14 @@ function ajax(method, url, data, continueWith, continueWithError, defaultErrorHa
     xhr.send(data);
 }
 
+var theMessage = function(text){
+    return {
+        id: appStateModel.uniqueId(),
+        text:text,
+        user: appStateModel.appState.user
+    }
+}
+
 function syncHistory(appState,newMsg, callback){
     if(newMsg.length === 0){
         callback();
@@ -98,20 +94,8 @@ function syncHistory(appState,newMsg, callback){
     callback(true);
 }
 
-function onSendButtonClick(element){
-    if(element.getAttribute('disabled') && enterKey)
-        return false;
-
-    element.setAttribute('disabled', 'disabled');
-
-    var newMessage = theMessage(newMessageBox.value);
-    if(newMessageBox.value == '')
-        return;
-
-    newMessageBox.value = '';    
-            
-            
-
+function onSendButtonClick(fn){
+    fn();
     var newMessage = theMessage(newMessageBox.value);
     if(newMessageBox.value == '')
         return;
@@ -147,6 +131,10 @@ function onDeleteClick(evtObj){
     });
 }
 
+
+
+
+
 function isError(text){
     if(text == "")
         return false;
@@ -166,4 +154,15 @@ function loadUser(){
     username.innerHTML = appStateModel.appState.user;
 }
 
-module.exports = Client;
+module.exports = {
+    ajax:ajax,
+    loadUser:loadUser,
+    syncHistory:syncHistory,
+    onSendButtonClick:onSendButtonClick,
+    onEditClick:onEditClick,
+    onEditComplete:onEditComplete,
+    onEditCancelClick:onEditCancelClick,
+    onEditUsernameClick:onEditUsernameClick,
+    onEditCompleteUsernameClick:onEditCompleteUsernameClick,
+    onDeleteClick:onDeleteClick
+};

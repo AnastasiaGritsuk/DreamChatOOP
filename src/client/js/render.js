@@ -9,29 +9,25 @@ document.addEventListener('click', function (evtObj) {
     delegateEvent(evtObj);
 });
 
-function DocumentView(){
-    this.newMessageBox = document.getElementById('msgBox_textareaId');
-    this.sendButton = document.getElementById('sendButton');
-    this.inputUsername = document.getElementsByClassName('icon-input')[0];
-    this.username = document.getElementById('username');
-    this.historyBox = document.getElementById('chatBoxId');
-}
-
-DocumentView.prototype.delegateEvent = delegateEvent;
-DocumentView.prototype.isProperElement = isProperElement;
-DocumentView.prototype.onEditClick = onEditClick;
-DocumentView.prototype.onEditCancelClick = onEditCancelClick;
-DocumentView.prototype.onEditUsernameClick = onEditUsernameClick;
-DocumentView.prototype.onEditCompleteUsernameClick = onEditCompleteUsernameClick;
-DocumentView.prototype.render = render;
-DocumentView.prototype.updateList = updateList;
-DocumentView.prototype.appendToList = appendToList;
-DocumentView.prototype.msgFromTemplate = msgFromTemplate;
-DocumentView.prototype.renderItemState = renderItemState;
+var newMessageBox = document.getElementById('msgBox_textareaId');
+var sendButton = document.getElementById('sendButton');
+var inputUsername = document.getElementsByClassName('icon-input')[0];
+var username = document.getElementById('username');
 
 function delegateEvent(evtObj){
     if(evtObj.type == 'click' && isProperElement(evtObj, 'btn sendButton')) {
-        emitter.emit('sendButtonClick');
+        emitter.emit('sendButtonClick', function (element, enterKey) {
+            if(element.getAttribute('disabled') && enterKey)
+                return false;
+
+            element.setAttribute('disabled', 'disabled');
+
+            var newMessage = theMessage(newMessageBox.value);
+            if(newMessageBox.value == '')
+                return;
+
+            newMessageBox.value = '';
+        });
         return;
     }
     if(evtObj.type == 'click' && isProperElement(evtObj, 'icon edit')) {
@@ -90,6 +86,8 @@ function onEditCompleteUsernameClick(evtObj){
     loadUser();
     evtObj.path[2].dataset.state = "initial";
 }
+
+var historyBox = document.getElementById('chatBoxId');
 
 function render(appStateModel){
     if(appStateModel.appState.history.length === 0)
@@ -157,4 +155,7 @@ function renderItemState(item, message){
     item.getElementsByClassName('msg-time')[0].innerHTML = message.time;
 }
 
-module.exports = DocumentView;
+module.exports = {
+    render:render,
+    emitter:emitter
+};
