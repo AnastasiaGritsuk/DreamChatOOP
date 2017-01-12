@@ -43,9 +43,15 @@ module.exports = (function () {
 
         return !!obj.error;
     };
-    
+
     Client.prototype.getHistory = function (url, token, continueWith) {
         this.ajax('GET', url + '?token=' + token, null, function(response){
+            continueWith(response);
+        });
+    };
+
+    Client.prototype.sendMessage = function (url, message, continueWith) {
+        this.ajax('POST', url, JSON.stringify(message), function(response){
             continueWith(response);
         });
     };

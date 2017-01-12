@@ -56,14 +56,8 @@ function onSendButtonClick(enterkey){
 
     view.newMessageBox.value = '';
 
-    sendMessage(newMessage, function(){
+    client.sendMessage(model.mainUrl, newMessage, function () {
         view.sendButton.removeAttribute('disabled');
-    });
-}
-
-function sendMessage(message, continueWith){
-    client.ajax('POST', model.mainUrl, JSON.stringify(message), function(response){
-        continueWith();
     });
 }
 
