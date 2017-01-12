@@ -86,7 +86,7 @@ function onDeleteClick(evtObj){
     view.sendButton.setAttribute('disabled', 'disabled');
     var current = evtObj.target;
 
-    client.ajax('DELETE', model.mainUrl + '/'  + 'delete(' + current.id + ')', null, function(){
+    client.deleteMessage(model.mainUrl, current.id, function () {
         view.sendButton.removeAttribute('disabled');
     });
 }

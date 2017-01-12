@@ -61,6 +61,14 @@ module.exports = (function () {
             continueWith(response);
         });
     };
+    
+    Client.prototype.deleteMessage = function (url, id, continueWith) {
+        this.ajax('DELETE', url + '/'  + 'delete(' + id + ')', null, function(response){
+            continueWith(response);
+        });
+    };
+    
+    
 
     return Client;
 })();
