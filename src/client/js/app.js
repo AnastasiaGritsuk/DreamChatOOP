@@ -56,7 +56,7 @@ function onSendButtonClick(enterkey){
 
     view.newMessageBox.value = '';
 
-    client.sendMessage(model.mainUrl, newMessage, function () {
+    client.postMessage(model.mainUrl, newMessage, function () {
         view.sendButton.removeAttribute('disabled');
     });
 }
@@ -77,7 +77,7 @@ function onEditComplete(evtObj){
         user: model.user
     };
 
-    client.ajax('PUT', model.mainUrl, JSON.stringify(updatedMessage), function(){
+    client.editMessage(model.mainUrl, updatedMessage, function () {
         view.sendButton.removeAttribute('disabled');
     });
 }

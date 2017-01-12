@@ -50,8 +50,14 @@ module.exports = (function () {
         });
     };
 
-    Client.prototype.sendMessage = function (url, message, continueWith) {
+    Client.prototype.postMessage = function (url, message, continueWith) {
         this.ajax('POST', url, JSON.stringify(message), function(response){
+            continueWith(response);
+        });
+    };
+
+    Client.prototype.editMessage = function (url, updatedMessage, continueWith) {
+        this.ajax('PUT', url, JSON.stringify(updatedMessage), function(response){
             continueWith(response);
         });
     };
