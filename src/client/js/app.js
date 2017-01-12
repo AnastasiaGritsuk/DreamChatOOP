@@ -1,7 +1,9 @@
-var appState = require('./app-state');
+var AppState = require('./app-state');
 var documentView = require('./documentView');
 var Emitter = require('component-emitter');
 var emitter = new Emitter;
+
+var model = new AppState();
 
 document.addEventListener("DOMContentLoaded", run);
 
@@ -29,18 +31,18 @@ function run(){
 
     documentView.sendButton.addEventListener('click', onSendButtonClick);
     doPolling(function(chunk){
-        appState.token = chunk.token;
+        model.token = chunk.token;
         syncHistory(chunk.messages, function(needToRender){
             if(needToRender)
-                render(appState);    
+                render(model);
         });
     });
 }
 
 function loadUser(){
-    var user = appState.user;
-    appState.user = user;
-    documentView.username.innerHTML = appState.user;
+    var user = model.user;
+    model.user = user;
+    documentView.username.innerHTML = model.user;
 }
 
 function onSendButtonClick(enterkey){
@@ -49,7 +51,7 @@ function onSendButtonClick(enterkey){
 
     documentView.sendButton.setAttribute('disabled', 'disabled');
 
-    var newMessage = appState.theMessage(documentView.newMessageBox.value);
+    var newMessage = model.theMessage(documentView.newMessageBox.value);
 
     if(documentView.newMessageBox.value == '')
         return;
@@ -62,7 +64,7 @@ function onSendButtonClick(enterkey){
 }
 
 function sendMessage(message, continueWith){
-    ajax('POST', appState.mainUrl, JSON.stringify(message), function(response){
+    ajax('POST', model.mainUrl, JSON.stringify(message), function(response){
         continueWith();
     });
 }
@@ -81,10 +83,10 @@ function onEditComplete(evtObj){
     var updatedMessage = {
         id: current.id,
         text: input.value,
-        user: appState.user 
+        user: model.user
     }
 
-    ajax('PUT', appState.mainUrl, JSON.stringify(updatedMessage), function(){
+    ajax('PUT', model.mainUrl, JSON.stringify(updatedMessage), function(){
         documentView.sendButton.removeAttribute('disabled');
     });
 }
@@ -93,7 +95,7 @@ function onDeleteClick(evtObj){
     documentView.sendButton.setAttribute('disabled', 'disabled');
     var current = evtObj.target;
 
-    ajax('DELETE', appState.mainUrl + '/'  + 'delete(' + current.id + ')', null, function(){
+    ajax('DELETE', model.mainUrl + '/'  + 'delete(' + current.id + ')', null, function(){
        documentView.sendButton.removeAttribute('disabled');
     });
 }
@@ -102,7 +104,7 @@ function doPolling(callback){
     function loop(){
         var xhr = new XMLHttpRequest();
 
-        ajax('GET', appState.mainUrl + '?token=' + appState.token, null, function(response){
+        ajax('GET', model.mainUrl + '?token=' + model.token, null, function(response){
             var answer = JSON.parse(response);
             callback(answer);
 
@@ -123,7 +125,7 @@ function syncHistory(newMsg, callback){
         return;
     }
 
-    var msgMap = appState.history.reduce(function(accumulator, msg){
+    var msgMap = model.history.reduce(function(accumulator, msg){
         accumulator[msg.id] = msg;
 
         return accumulator;
@@ -134,7 +136,7 @@ function syncHistory(newMsg, callback){
         var item = msgMap[id];
 
         if(item == null){
-            appState.history.push(newMsg[i]);
+            model.history.push(newMsg[i]);
             continue;
         }
 
@@ -145,18 +147,18 @@ function syncHistory(newMsg, callback){
     callback(true);
 }
 
-function render(appState){
-    if(appState.history.length === 0)
+function render(model){
+    if(model.history.length === 0)
         return;
 
-    var msgMap = appState.history.reduce(function(accumulator, msg){
+    var msgMap = model.history.reduce(function(accumulator, msg){
         accumulator[msg.id] = msg;
 
         return accumulator;
     },{});
 
     updateList(documentView.historyBox, msgMap);
-    appendToList(documentView.historyBox, appState.history, msgMap);
+    appendToList(documentView.historyBox, model.history, msgMap);
 }
 
 function updateList(element, msgMap){
@@ -193,7 +195,7 @@ function appendToList(element, items, msgMap){
 }
 
 function isCurrentUser(user){
-    return user != appState.user;
+    return user != model.user;
 }
 
 function msgFromTemplate(mode){
@@ -287,7 +289,7 @@ function onEditUsernameClick(evtObj){
 }
 
 function onEditCompleteUsernameClick(evtObj){
-    appState.user = documentView.inputUsername.value;
+    model.user = documentView.inputUsername.value;
     loadUser();
     evtObj.path[2].dataset.state = "initial";
 }

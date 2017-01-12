@@ -24,6 +24,4 @@ AppState.prototype.theMessage = function(text){
     }
 };
 
-var appState = new AppState();
-
-module.exports = appState;
+module.exports = AppState;
