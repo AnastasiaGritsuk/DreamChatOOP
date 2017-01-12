@@ -66,7 +66,7 @@ function onSendButtonClick(enterkey){
 function sendMessage(message, continueWith){
     client.ajax('POST', model.mainUrl, JSON.stringify(message), function(response){
         continueWith();
-    }, null, defaultErrorHandler, isError);
+    });
 }
 
 function onEditClick(evtObj){
@@ -87,7 +87,7 @@ function onEditComplete(evtObj){
 
     client.ajax('PUT', model.mainUrl, JSON.stringify(updatedMessage), function(){
         view.sendButton.removeAttribute('disabled');
-    }, null, defaultErrorHandler, isError);
+    });
 }
 
 function onDeleteClick(evtObj){
@@ -96,7 +96,7 @@ function onDeleteClick(evtObj){
 
     client.ajax('DELETE', model.mainUrl + '/'  + 'delete(' + current.id + ')', null, function(){
         view.sendButton.removeAttribute('disabled');
-    }, null, defaultErrorHandler, isError);
+    });
 }
 
 function doPolling(callback){
@@ -104,9 +104,8 @@ function doPolling(callback){
         client.ajax('GET', model.mainUrl + '?token=' + model.token, null, function(response){
             var answer = JSON.parse(response);
             callback(answer);
-
             setTimeout(loop, 1000);
-        }, null, defaultErrorHandler, isError);
+        });
     }
     loop();
 }
@@ -147,11 +146,6 @@ window.onerror = function(err) {
    // output(err.toString());
 };
 
-function defaultErrorHandler(message){
-    console.error(message);
-    // output(message);
-}
-
 function onEditUsernameClick(evtObj){
    evtObj.path[2].dataset.state = "edit";
     view.inputUsername.focus();
@@ -174,14 +168,5 @@ function showTypeheads(){
 }
 
 function isError(text) {
-    if(text == "")
-        return false;
 
-    try{
-        var obj = JSON.parse(text);
-    }catch(ex){
-        return true;
-    }
-
-    return !!obj.error;
 };
