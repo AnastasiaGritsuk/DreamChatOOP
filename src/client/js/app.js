@@ -1,7 +1,5 @@
 var AppState = require('./app-state');
 var DocumentView = require('./documentView');
-var Emitter = require('component-emitter');
-var emitter = new Emitter;
 
 var model = new AppState();
 var view = new DocumentView();
@@ -72,8 +70,7 @@ function sendMessage(message, continueWith){
 function onEditClick(evtObj){
     view.sendButton.setAttribute('disabled', 'disabled');
     var current = evtObj.target.shadowRoot.children[1];
-    current.dataset.state = "edit"; 
-
+    current.dataset.state = "edit";
 }
 
 function onEditComplete(evtObj){
@@ -187,15 +184,11 @@ function appendToList(element, items, msgMap){
         view.historyBox.appendChild(msgWpapper);
 
         var root1 = document.getElementById(item.id).createShadowRoot();
-        var template = msgFromTemplate(isCurrentUser(item.user));
+        var template = msgFromTemplate(model.isLocalUser(item.user));
         renderItemState(template.children[1], item);
 
         root1.appendChild(template);
     }
-}
-
-function isCurrentUser(user){
-    return user != model.user;
 }
 
 function msgFromTemplate(mode){
