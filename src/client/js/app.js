@@ -1,8 +1,10 @@
 var AppState = require('./app-state');
 var DocumentView = require('./documentView');
+var Client = require('./client');
 
 var model = new AppState();
 var view = new DocumentView();
+var client = new Client();
 
 view.on('ready', run);
 view.on('sendButtonClick', onSendButtonClick);
@@ -62,9 +64,9 @@ function onSendButtonClick(enterkey){
 }
 
 function sendMessage(message, continueWith){
-    ajax('POST', model.mainUrl, JSON.stringify(message), function(response){
+    client.ajax('POST', model.mainUrl, JSON.stringify(message), function(response){
         continueWith();
-    });
+    }, null, defaultErrorHandler, isError);
 }
 
 function onEditClick(evtObj){
@@ -83,32 +85,29 @@ function onEditComplete(evtObj){
         user: model.user
     };
 
-    ajax('PUT', model.mainUrl, JSON.stringify(updatedMessage), function(){
+    client.ajax('PUT', model.mainUrl, JSON.stringify(updatedMessage), function(){
         view.sendButton.removeAttribute('disabled');
-    });
+    }, null, defaultErrorHandler, isError);
 }
 
 function onDeleteClick(evtObj){
     view.sendButton.setAttribute('disabled', 'disabled');
     var current = evtObj.target;
 
-    ajax('DELETE', model.mainUrl + '/'  + 'delete(' + current.id + ')', null, function(){
+    client.ajax('DELETE', model.mainUrl + '/'  + 'delete(' + current.id + ')', null, function(){
         view.sendButton.removeAttribute('disabled');
-    });
+    }, null, defaultErrorHandler, isError);
 }
 
 function doPolling(callback){
     function loop(){
-        var xhr = new XMLHttpRequest();
-
-        ajax('GET', model.mainUrl + '?token=' + model.token, null, function(response){
+        client.ajax('GET', model.mainUrl + '?token=' + model.token, null, function(response){
             var answer = JSON.parse(response);
             callback(answer);
 
             setTimeout(loop, 1000);
-        });
+        }, null, defaultErrorHandler, isError);
     }
-
     loop();
 }
 
@@ -144,70 +143,13 @@ function syncHistory(newMsg, callback){
     callback(true);
 }
 
-function ajax(method, url, data, continueWith, continueWithError){
-    var xhr = new XMLHttpRequest();
-
-    continueWithError = continueWithError || defaultErrorHandler;
-    xhr.open(method || 'GET', url, true);
-
-    xhr.onload = function(){
-        if(xhr.readyState !==4)
-            return;
-
-        if(xhr.status !=200){
-            continueWithError('Error on the server side, response ' + xhr.status);
-            return;
-        }
-
-        if(isError(xhr.responseText)) {
-            continueWithError('Error on the server side, response ' + xhr.responseText);
-            return;
-        }
-
-        continueWith(xhr.responseText);
-
-    };
-
-    xhr.ontimeout = function(){
-        continueWithError('Server timed out !');
-    };
-
-    xhr.onerror = function (e) {
-        var errMsg = 'Server connection error !\n'+
-        '\n' +
-        'Check if \n'+
-        '- server is active\n'+
-        '- server sends header "Access-Control-Allow-Origin:*"\n'+
-        '- server sends header "Access-Control-Allow-Methods: PUT, DELETE, POST, GET, OPTIONS"\n';
-
-        continueWithError(errMsg);
-    };
-
-    xhr.send(data);
-
-}
-
 window.onerror = function(err) {
    // output(err.toString());
 };
 
-
 function defaultErrorHandler(message){
     console.error(message);
     // output(message);
-}
-
-function isError(text){
-    if(text == "")
-        return false;
-
-    try{
-        var obj = JSON.parse(text);
-    }catch(ex){
-        return true;
-    }
-
-    return !!obj.error;
 }
 
 function onEditUsernameClick(evtObj){
@@ -230,3 +172,16 @@ function changeServer(){
 function showTypeheads(){
    // $('.typeahead').typeahead();
 }
+
+function isError(text) {
+    if(text == "")
+        return false;
+
+    try{
+        var obj = JSON.parse(text);
+    }catch(ex){
+        return true;
+    }
+
+    return !!obj.error;
+};
