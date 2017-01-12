@@ -43,6 +43,12 @@ module.exports = (function () {
 
         return !!obj.error;
     };
+    
+    Client.prototype.getHistory = function (url, token, continueWith) {
+        this.ajax('GET', url + '?token=' + token, null, function(response){
+            continueWith(response);
+        });
+    };
 
     return Client;
 })();

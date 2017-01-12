@@ -99,7 +99,7 @@ function onDeleteClick(evtObj){
 
 function doPolling(callback){
     function loop(){
-        client.ajax('GET', model.mainUrl + '?token=' + model.token, null, function(response){
+        client.getHistory(model.mainUrl, model.token, function (response) {
             var answer = JSON.parse(response);
             callback(answer);
             setTimeout(loop, 1000);
