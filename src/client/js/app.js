@@ -1,23 +1,23 @@
 var AppState = require('./app-state');
-var documentView = require('./documentView');
+var DocumentView = require('./documentView');
 var Emitter = require('component-emitter');
 var emitter = new Emitter;
 
 var model = new AppState();
+var view = new DocumentView();
 
-document.addEventListener("DOMContentLoaded", run);
-
-emitter.on('sendButtonClick', onSendButtonClick);
-emitter.on('editCompleteClick', onEditComplete);
-emitter.on('deleteClick', onDeleteClick);
-emitter.on('editClick', onEditClick);
-emitter.on('editCancelClick', onEditCancelClick);
-emitter.on('editUsernameClick', onEditUsernameClick);
-emitter.on('editCompleteUsernameClick', onEditCompleteUsernameClick);
+view.on('ready', run);
+view.on('sendButtonClick', onSendButtonClick);
+view.on('editCompleteClick', onEditComplete);
+view.on('deleteClick', onDeleteClick);
+view.on('editClick', onEditClick);
+view.on('editCancelClick', onEditCancelClick);
+view.on('editUsernameClick', onEditUsernameClick);
+view.on('editCompleteUsernameClick', onEditCompleteUsernameClick);
 
 function run(){
     loadUser();
-    documentView.newMessageBox.addEventListener('keypress', function(e){
+    view.newMessageBox.addEventListener('keypress', function(e){
 
         showTypeheads();
 
@@ -29,7 +29,7 @@ function run(){
         return false;
     });
 
-    documentView.sendButton.addEventListener('click', onSendButtonClick);
+    view.sendButton.addEventListener('click', onSendButtonClick);
     doPolling(function(chunk){
         model.token = chunk.token;
         syncHistory(chunk.messages, function(needToRender){
@@ -42,24 +42,24 @@ function run(){
 function loadUser(){
     var user = model.user;
     model.user = user;
-    documentView.username.innerHTML = model.user;
+    view.username.innerHTML = model.user;
 }
 
 function onSendButtonClick(enterkey){
-    if(documentView.sendButton.getAttribute('disabled') && enterkey)
+    if(view.sendButton.getAttribute('disabled') && enterkey)
         return false;
 
-    documentView.sendButton.setAttribute('disabled', 'disabled');
+    view.sendButton.setAttribute('disabled', 'disabled');
 
-    var newMessage = model.theMessage(documentView.newMessageBox.value);
+    var newMessage = model.theMessage(view.newMessageBox.value);
 
-    if(documentView.newMessageBox.value == '')
+    if(view.newMessageBox.value == '')
         return;
 
-    documentView.newMessageBox.value = '';
+    view.newMessageBox.value = '';
 
     sendMessage(newMessage, function(){
-        documentView.sendButton.removeAttribute('disabled');
+        view.sendButton.removeAttribute('disabled');
     });
 }
 
@@ -70,7 +70,7 @@ function sendMessage(message, continueWith){
 }
 
 function onEditClick(evtObj){
-    documentView.sendButton.setAttribute('disabled', 'disabled');
+    view.sendButton.setAttribute('disabled', 'disabled');
     var current = evtObj.target.shadowRoot.children[1];
     current.dataset.state = "edit"; 
 
@@ -87,16 +87,16 @@ function onEditComplete(evtObj){
     }
 
     ajax('PUT', model.mainUrl, JSON.stringify(updatedMessage), function(){
-        documentView.sendButton.removeAttribute('disabled');
+        view.sendButton.removeAttribute('disabled');
     });
 }
 
 function onDeleteClick(evtObj){
-    documentView.sendButton.setAttribute('disabled', 'disabled');
+    view.sendButton.setAttribute('disabled', 'disabled');
     var current = evtObj.target;
 
     ajax('DELETE', model.mainUrl + '/'  + 'delete(' + current.id + ')', null, function(){
-       documentView.sendButton.removeAttribute('disabled');
+        view.sendButton.removeAttribute('disabled');
     });
 }
 
@@ -157,8 +157,8 @@ function render(model){
         return accumulator;
     },{});
 
-    updateList(documentView.historyBox, msgMap);
-    appendToList(documentView.historyBox, model.history, msgMap);
+    updateList(view.historyBox, msgMap);
+    appendToList(view.historyBox, model.history, msgMap);
 }
 
 function updateList(element, msgMap){
@@ -184,7 +184,7 @@ function appendToList(element, items, msgMap){
 
         var msgWpapper = document.createElement('div');
         msgWpapper.setAttribute('id', item.id);
-        documentView.historyBox.appendChild(msgWpapper);
+        view.historyBox.appendChild(msgWpapper);
 
         var root1 = document.getElementById(item.id).createShadowRoot();
         var template = msgFromTemplate(isCurrentUser(item.user));
@@ -285,11 +285,11 @@ function isError(text){
 
 function onEditUsernameClick(evtObj){
    evtObj.path[2].dataset.state = "edit";
-   documentView.inputUsername.focus();
+    view.inputUsername.focus();
 }
 
 function onEditCompleteUsernameClick(evtObj){
-    model.user = documentView.inputUsername.value;
+    model.user = view.inputUsername.value;
     loadUser();
     evtObj.path[2].dataset.state = "initial";
 }

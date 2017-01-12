@@ -7,6 +7,9 @@ function DocumentView() {
     this.username = document.getElementById('username');
     this.sendButton = document.getElementById('sendButton');
     this.newMessageBox = document.getElementById('msgBox_textareaId');
+    document.addEventListener('DOMContentLoaded', ()=>{
+        this.emit('ready');
+    });
     document.addEventListener('click', (evtObj)=>{
         this.delegateEvent(evtObj);
     });
@@ -18,36 +21,34 @@ DocumentView.prototype.isProperElement = function(e, classname){
 
 DocumentView.prototype.delegateEvent = function (evtObj){
     if(evtObj.type == 'click' && this.isProperElement(evtObj, 'btn sendButton')) {
-        DocumentView.emit('sendButtonClick');
+        this.emit('sendButtonClick', evtObj);
         return;
     }
     if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon edit')) {
-        DocumentView.emit('editClick');
+        this.emit('editClick', evtObj);
         return;
     }
     if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon cancel')) {
-        DocumentView.emit('editCancelClick');
+        this.emit('editCancelClick', evtObj);
         return;
     }
     if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon complete')) {
-        DocumentView.emit('editCompleteClick');
+        this.emit('editCompleteClick', evtObj);
         return;
     }
     if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon delete')) {
-        DocumentView.emit('deleteClick');
+        this.emit('deleteClick', evtObj);
         return;
     }
     if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon editOn-username')) {
-        DocumentView.emit('editUsernameClick');
+        this.emit('editUsernameClick', evtObj);
         return;
     }
 
     if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon editOff-username')) {
-        DocumentView.emit('editCompleteUsernameClick');
+        this.emit('editCompleteUsernameClick', evtObj);
         return;
     }
 }
 
-var documentView = new DocumentView();
-
-module.exports = documentView;
+module.exports = DocumentView;
