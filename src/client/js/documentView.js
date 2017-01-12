@@ -7,15 +7,16 @@ function DocumentView() {
     this.username = document.getElementById('username');
     this.sendButton = document.getElementById('sendButton');
     this.newMessageBox = document.getElementById('msgBox_textareaId');
-    document.addEventListener('click', this.delegateEvent);
+    document.addEventListener('click', (evtObj)=>{
+        this.delegateEvent(evtObj);
+    });
 }
-
 
 DocumentView.prototype.isProperElement = function(e, classname){
     return e.path[1].className === classname;
 }
 
-DocumentView.prototype.delegateEvent = (evtObj)=>{
+DocumentView.prototype.delegateEvent = function (evtObj){
     if(evtObj.type == 'click' && this.isProperElement(evtObj, 'btn sendButton')) {
         DocumentView.emit('sendButtonClick');
         return;
