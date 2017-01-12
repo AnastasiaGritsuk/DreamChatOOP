@@ -40,8 +40,6 @@ function run(){
 }
 
 function loadUser(){
-    var user = model.user;
-    model.user = user;
     view.username.innerHTML = model.user;
 }
 
