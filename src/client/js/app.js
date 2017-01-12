@@ -7,13 +7,13 @@ var view = new DocumentView();
 var client = new Client();
 
 view.on('ready', run);
-view.on('sendButtonClick', onSendButtonClick);
+view.on('sendButtonClick', onSendButton);
 view.on('editCompleteClick', onEditComplete);
-view.on('deleteClick', onDeleteClick);
-view.on('editClick', onEditClick);
-view.on('editCancelClick', onEditCancelClick);
-view.on('editUsernameClick', onEditUsernameClick);
-view.on('editCompleteUsernameClick', onEditCompleteUsernameClick);
+view.on('deleteClick', onDelete);
+view.on('editClick', onEdit);
+view.on('editCancelClick', onEditCancel);
+view.on('editUsernameClick', onEditUsername);
+view.on('editCompleteUsernameClick', onEditCompleteUsername);
 
 function run(){
     loadUser();
@@ -22,14 +22,14 @@ function run(){
         showTypeheads();
 
         if(e.keyCode == 13){
-            onSendButtonClick(true);
+            onSendButton(true);
             e.preventDefault();
         }
         
         return false;
     });
 
-    view.sendButton.addEventListener('click', onSendButtonClick);
+    view.sendButton.addEventListener('click', onSendButton);
     doPolling(function(chunk){
         model.token = chunk.token;
         syncHistory(chunk.messages, function(needToRender){
@@ -43,7 +43,7 @@ function loadUser(){
     view.username.innerHTML = model.user;
 }
 
-function onSendButtonClick(enterkey){
+function onSendButton(enterkey){
     if(view.sendButton.getAttribute('disabled') && enterkey)
         return false;
 
@@ -61,7 +61,7 @@ function onSendButtonClick(enterkey){
     });
 }
 
-function onEditClick(evtObj){
+function onEdit(evtObj){
     view.sendButton.setAttribute('disabled', 'disabled');
     var current = evtObj.target.shadowRoot.children[1];
     current.dataset.state = "edit";
@@ -82,7 +82,7 @@ function onEditComplete(evtObj){
     });
 }
 
-function onDeleteClick(evtObj){
+function onDelete(evtObj){
     view.sendButton.setAttribute('disabled', 'disabled');
     var current = evtObj.target;
 
@@ -102,7 +102,7 @@ function doPolling(callback){
     loop();
 }
 
-function onEditCancelClick(evtObj){
+function onEditCancel(evtObj){
     evtObj.target.shadowRoot.children[1].dataset.state = "new";
 }
 
@@ -138,12 +138,12 @@ window.onerror = function(err) {
    // output(err.toString());
 };
 
-function onEditUsernameClick(evtObj){
+function onEditUsername(evtObj){
    evtObj.path[2].dataset.state = "edit";
     view.inputUsername.focus();
 }
 
-function onEditCompleteUsernameClick(evtObj){
+function onEditCompleteUsername(evtObj){
     model.user = view.inputUsername.value;
     loadUser();
     evtObj.path[2].dataset.state = "initial";
