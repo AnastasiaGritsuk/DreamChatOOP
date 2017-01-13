@@ -59,12 +59,12 @@ function onSendButton(enterkey){
 
 function onEdit(evtObj){
     view.sendButton.setAttribute('disabled', 'disabled');
-    var current = evtObj.target.shadowRoot.children[1];
+    var current = getCurrentMsgContainer(evtObj);
     current.dataset.state = "edit";
 }
 
 function onEditComplete(evtObj){
-    var current = evtObj.target.shadowRoot.children[1];
+    var current = getCurrentMsgContainer(evtObj);
     var input = current.getElementsByClassName('msg-editedText')[0];
 
     var updatedMessage = {
@@ -78,9 +78,13 @@ function onEditComplete(evtObj){
     });
 }
 
+function getCurrentMsgContainer(evtObj) {
+    return evtObj.target.shadowRoot.children[1];
+}
+
 function onDelete(evtObj){
     view.sendButton.setAttribute('disabled', 'disabled');
-    var current = evtObj.target.shadowRoot.children[1];
+    var current = getCurrentMsgContainer(evtObj);
 
     client.deleteMessage(model.mainUrl, current.id, function () {
         view.sendButton.removeAttribute('disabled');
