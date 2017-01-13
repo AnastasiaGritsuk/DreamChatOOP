@@ -149,7 +149,10 @@ module.exports = (function () {
     DocumentView.prototype.setUsernameState = function (evtObj, state) {
         this.getUsernameContainer(evtObj).dataset.state = state;
     };
-    
+
+    DocumentView.prototype.loadUser = function (model){
+        this.username.innerHTML = model.user;
+    }
     return DocumentView;
 })();
 

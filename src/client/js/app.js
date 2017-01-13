@@ -16,7 +16,7 @@ view.on('editUsernameClick', onEditUsername);
 view.on('editCompleteUsernameClick', onEditCompleteUsername);
 
 function run(){
-    loadUser();
+    view.loadUser(model);
     view.newMessageBox.addEventListener('keypress', function(e){
         showTypeheads();
         if(e.keyCode == 13){
@@ -33,10 +33,6 @@ function run(){
                 view.render(model);
         });
     });
-}
-
-function loadUser(){
-    view.username.innerHTML = model.user;
 }
 
 function onSendButton(enterkey){
@@ -133,7 +129,7 @@ function onEditUsername(evtObj){
 
 function onEditCompleteUsername(evtObj){
     model.user = view.getUsername();
-    loadUser();
+    view.loadUser(model);
     view.setUsernameState(evtObj, 'initial');
 }
 
