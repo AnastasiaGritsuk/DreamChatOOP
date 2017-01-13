@@ -56,8 +56,7 @@ function onSendButton(enterkey){
 
 function onEdit(evtObj){
     view.sendButton.setAttribute('disabled', 'disabled');
-    var current = view.getCurrentMsgContainer(evtObj);
-    current.dataset.state = "edit";
+    view.getCurrentMsgContainer(evtObj).dataset.state = "edit";
 }
 
 function onEditComplete(evtObj){
@@ -128,14 +127,14 @@ window.onerror = function(err) {
 };
 
 function onEditUsername(evtObj){
-   evtObj.path[2].dataset.state = "edit";
-   view.inputUsername.focus();
+    view.getCurrentMsgContainer(evtObj).dataset.state = "edit";
+    view.inputUsername.focus();
 }
 
 function onEditCompleteUsername(evtObj){
     model.user = view.inputUsername.value;
     loadUser();
-    evtObj.path[2].dataset.state = "initial";
+    view.getCurrentMsgContainer(evtObj).dataset.state = "initial";
 }
 
 function changeServer(){}
