@@ -120,6 +120,15 @@ module.exports = (function () {
     DocumentView.prototype.getCurrentMsgContainer = function (evtObj) {
         return evtObj.target.shadowRoot.children[1];
     };
+
+    DocumentView.prototype.changeSendBtnState = function (mode) {
+        switch(mode) {
+            case 'enabled':  this.sendButton.removeAttribute('disabled');
+                break;
+
+            case 'disabled':  this.sendButton.removeAttribute('disabled');
+        }
+    }
     
     return DocumentView;
 })();

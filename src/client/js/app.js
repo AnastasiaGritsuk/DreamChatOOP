@@ -43,19 +43,19 @@ function onSendButton(enterkey){
     if(view.sendButton.getAttribute('disabled') && enterkey)
         return false;
 
-    view.sendButton.setAttribute('disabled', 'disabled');
+    view.changeSendBtnState('disabled');
     var newMessage = model.theMessage(view.newMessageBox.value);
     if(view.newMessageBox.value == '')
         return;
 
     view.newMessageBox.value = '';
     client.postMessage(model.mainUrl, newMessage, function () {
-        view.sendButton.removeAttribute('disabled');
+        view.changeSendBtnState('enabled');
     });
 }
 
 function onEdit(evtObj){
-    view.sendButton.setAttribute('disabled', 'disabled');
+    view.changeSendBtnState('enabled');
     view.getCurrentMsgContainer(evtObj).dataset.state = "edit";
 }
 
@@ -69,16 +69,16 @@ function onEditComplete(evtObj){
         user: model.user
     };
     client.editMessage(model.mainUrl, updatedMessage, function () {
-        view.sendButton.removeAttribute('disabled');
+        view.changeSendBtnState('enabled');
     });
 }
 
 function onDelete(evtObj){
-    view.sendButton.setAttribute('disabled', 'disabled');
+    view.changeSendBtnState('enabled');
     var current = view.getCurrentMsgContainer(evtObj);
 
     client.deleteMessage(model.mainUrl, current.id, function () {
-        view.sendButton.removeAttribute('disabled');
+        view.changeSendBtnState('enabled');
     });
 }
 
