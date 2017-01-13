@@ -67,8 +67,6 @@ module.exports = (function () {
             continueWith(response);
         });
     };
-    
-    
 
     return Client;
 })();

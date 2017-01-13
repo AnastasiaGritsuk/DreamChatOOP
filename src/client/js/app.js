@@ -18,18 +18,14 @@ view.on('editCompleteUsernameClick', onEditCompleteUsername);
 function run(){
     loadUser();
     view.newMessageBox.addEventListener('keypress', function(e){
-
         showTypeheads();
-
         if(e.keyCode == 13){
             onSendButton(true);
             e.preventDefault();
         }
-        
         return false;
     });
 
-    view.sendButton.addEventListener('click', onSendButton);
     doPolling(function(chunk){
         model.token = chunk.token;
         syncHistory(chunk.messages, function(needToRender){
