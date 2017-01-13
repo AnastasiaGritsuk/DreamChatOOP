@@ -44,14 +44,11 @@ function onSendButton(enterkey){
         return false;
 
     view.sendButton.setAttribute('disabled', 'disabled');
-
     var newMessage = model.theMessage(view.newMessageBox.value);
-
     if(view.newMessageBox.value == '')
         return;
 
     view.newMessageBox.value = '';
-
     client.postMessage(model.mainUrl, newMessage, function () {
         view.sendButton.removeAttribute('disabled');
     });
@@ -59,12 +56,12 @@ function onSendButton(enterkey){
 
 function onEdit(evtObj){
     view.sendButton.setAttribute('disabled', 'disabled');
-    var current = getCurrentMsgContainer(evtObj);
+    var current = view.getCurrentMsgContainer(evtObj);
     current.dataset.state = "edit";
 }
 
 function onEditComplete(evtObj){
-    var current = getCurrentMsgContainer(evtObj);
+    var current = view.getCurrentMsgContainer(evtObj);
     var input = current.getElementsByClassName('msg-editedText')[0];
 
     var updatedMessage = {
@@ -72,19 +69,14 @@ function onEditComplete(evtObj){
         text: input.value,
         user: model.user
     };
-
     client.editMessage(model.mainUrl, updatedMessage, function () {
         view.sendButton.removeAttribute('disabled');
     });
 }
 
-function getCurrentMsgContainer(evtObj) {
-    return evtObj.target.shadowRoot.children[1];
-}
-
 function onDelete(evtObj){
     view.sendButton.setAttribute('disabled', 'disabled');
-    var current = getCurrentMsgContainer(evtObj);
+    var current = view.getCurrentMsgContainer(evtObj);
 
     client.deleteMessage(model.mainUrl, current.id, function () {
         view.sendButton.removeAttribute('disabled');
@@ -103,7 +95,7 @@ function doPolling(callback){
 }
 
 function onEditCancel(evtObj){
-    evtObj.target.shadowRoot.children[1].dataset.state = "new";
+    view.getCurrentMsgContainer(evtObj).dataset.state = "new";
 }
 
 function syncHistory(newMsg, callback){
@@ -111,7 +103,6 @@ function syncHistory(newMsg, callback){
         callback();
         return;
     }
-
     var msgMap = model.history.reduce(function(accumulator, msg){
         accumulator[msg.id] = msg;
 
@@ -126,11 +117,9 @@ function syncHistory(newMsg, callback){
             model.history.push(newMsg[i]);
             continue;
         }
-
         item.text = newMsg[i].text;
         item.status = newMsg[i].status;
     }
-
     callback(true);
 }
 
@@ -140,7 +129,7 @@ window.onerror = function(err) {
 
 function onEditUsername(evtObj){
    evtObj.path[2].dataset.state = "edit";
-    view.inputUsername.focus();
+   view.inputUsername.focus();
 }
 
 function onEditCompleteUsername(evtObj){
@@ -149,16 +138,8 @@ function onEditCompleteUsername(evtObj){
     evtObj.path[2].dataset.state = "initial";
 }
 
-//change server
-
-function changeServer(){
-
-}
+function changeServer(){}
 
 function showTypeheads(){
    // $('.typeahead').typeahead();
 }
-
-function isError(text) {
-
-};

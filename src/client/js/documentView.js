@@ -117,6 +117,10 @@ module.exports = (function () {
         item.getElementsByClassName('msg-time')[0].innerHTML = message.time;
     };
     
+    DocumentView.prototype.getCurrentMsgContainer = function (evtObj) {
+        return evtObj.target.shadowRoot.children[1];
+    };
+    
     return DocumentView;
 })();
 
