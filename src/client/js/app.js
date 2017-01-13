@@ -44,8 +44,8 @@ function onSendButton(enterkey){
         return false;
 
     view.changeSendBtnState('disabled');
-    var newMessage = model.theMessage(view.newMessageBox.value);
-    if(view.newMessageBox.value == '')
+    var newMessage = model.theMessage(view.getNewMessage());
+    if(view.getNewMessage() == '')
         return;
 
     view.newMessageBox.value = '';
@@ -127,14 +127,14 @@ window.onerror = function(err) {
 };
 
 function onEditUsername(evtObj){
-    view.setState(evtObj, 'edit');
+    view.setUsernameState(evtObj, 'edit');
     view.inputUsername.focus();
 }
 
 function onEditCompleteUsername(evtObj){
-    model.user = view.inputUsername.value;
+    model.user = view.getUsername();
     loadUser();
-    view.setState(evtObj, 'initial');
+    view.setUsernameState(evtObj, 'initial');
 }
 
 function changeServer(){}

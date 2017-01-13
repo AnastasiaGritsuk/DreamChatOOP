@@ -118,7 +118,11 @@ module.exports = (function () {
     };
     
     DocumentView.prototype.getCurrentMsgContainer = function (evtObj) {
-        return evtObj.target.shadowRoot.children[1];
+        return evtObj.target.shadowRoot.children[1] || evtObj.path[2];
+    };
+
+    DocumentView.prototype.getUsernameContainer = function (evtObj) {
+        return evtObj.path[2];
     };
 
     DocumentView.prototype.changeSendBtnState = function (mode) {
@@ -132,6 +136,18 @@ module.exports = (function () {
 
     DocumentView.prototype.setState = function (evtObj, state) {
         this.getCurrentMsgContainer(evtObj).dataset.state = state;
+    };
+    
+    DocumentView.prototype.getUsername = function () {
+        return this.inputUsername.value;
+    };
+    
+    DocumentView.prototype.getNewMessage = function () {
+        return this.newMessageBox.value;
+    };
+    
+    DocumentView.prototype.setUsernameState = function (evtObj, state) {
+        this.getUsernameContainer(evtObj).dataset.state = state;
     };
     
     return DocumentView;
