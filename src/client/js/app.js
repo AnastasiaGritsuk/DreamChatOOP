@@ -56,7 +56,7 @@ function onSendButton(enterkey){
 
 function onEdit(evtObj){
     view.changeSendBtnState('enabled');
-    view.getCurrentMsgContainer(evtObj).dataset.state = "edit";
+    view.setState(evtObj, 'edit');
 }
 
 function onEditComplete(evtObj){
@@ -94,7 +94,7 @@ function doPolling(callback){
 }
 
 function onEditCancel(evtObj){
-    view.getCurrentMsgContainer(evtObj).dataset.state = "new";
+    view.setState(evtObj, 'new');
 }
 
 function syncHistory(newMsg, callback){
@@ -127,14 +127,14 @@ window.onerror = function(err) {
 };
 
 function onEditUsername(evtObj){
-    view.getCurrentMsgContainer(evtObj).dataset.state = "edit";
+    view.setState(evtObj, 'edit');
     view.inputUsername.focus();
 }
 
 function onEditCompleteUsername(evtObj){
     model.user = view.inputUsername.value;
     loadUser();
-    view.getCurrentMsgContainer(evtObj).dataset.state = "initial";
+    view.setState(evtObj, 'initial');
 }
 
 function changeServer(){}

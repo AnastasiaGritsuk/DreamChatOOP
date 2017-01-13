@@ -128,7 +128,11 @@ module.exports = (function () {
 
             case 'disabled':  this.sendButton.removeAttribute('disabled');
         }
-    }
+    };
+
+    DocumentView.prototype.setState = function (evtObj, state) {
+        this.getCurrentMsgContainer(evtObj).dataset.state = state;
+    };
     
     return DocumentView;
 })();
