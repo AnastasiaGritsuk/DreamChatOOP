@@ -80,7 +80,7 @@ function onEditComplete(evtObj){
 
 function onDelete(evtObj){
     view.sendButton.setAttribute('disabled', 'disabled');
-    var current = evtObj.target;
+    var current = evtObj.target.shadowRoot.children[1];
 
     client.deleteMessage(model.mainUrl, current.id, function () {
         view.sendButton.removeAttribute('disabled');
