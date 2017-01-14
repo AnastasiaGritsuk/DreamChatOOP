@@ -22,32 +22,31 @@ module.exports = (function () {
 
     DocumentView.prototype.delegateEvent = function (evtObj){
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'btn sendButton')) {
-            this.emit('sendButtonClick', evtObj);
+            this.emit('sendMsg', evtObj);
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon edit')) {
-            this.emit('editClick', evtObj);
-            return;
-        }
-        if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon cancel')) {
-            this.emit('editCancelClick', evtObj);
+            this.emit('editMsgBegin', evtObj);
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon complete')) {
-            this.emit('editCompleteClick', evtObj);
+            this.emit('editMsgComplete', evtObj);
+            return;
+        }
+        if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon cancel')) {
+            this.emit('editMsgCancel', evtObj);
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon delete')) {
-            this.emit('deleteClick', evtObj);
+            this.emit('deleteMsg', evtObj);
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon editOn-username')) {
-            this.emit('editUsernameClick', evtObj);
+            this.emit('editUsernameBegin', evtObj);
             return;
         }
-
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon editOff-username')) {
-            this.emit('editCompleteUsernameClick', evtObj);
+            this.emit('editUsernameComplete', evtObj);
             return;
         }
     };
@@ -55,20 +54,16 @@ module.exports = (function () {
     DocumentView.prototype.render = function (modelRoot) {
         if(modelRoot.history.length === 0)
             return;
-
         var msgMap = modelRoot.history.reduce(function(accumulator, msg){
             accumulator[msg.id] = msg;
-
             return accumulator;
         },{});
-
         this.updateList(this.historyBox, msgMap);
         this.appendToList(this.historyBox, modelRoot.history, msgMap, modelRoot);
     };
 
     DocumentView.prototype.updateList = function (element, msgMap) {
         var children = element.children;
-
         for(var i=0;i<children.length;i++){
             var child = children[i];
             var id = child.attributes['id'].value;
@@ -77,23 +72,20 @@ module.exports = (function () {
             msgMap[id] = null;
         }
     };
+
     DocumentView.prototype.appendToList = function (element, items, msgMap, modelRoot) {
         for(var i=0; i<items.length; i++){
             var item = items[i];
 
             if(msgMap[item.id] == null)
                 continue;
-
             msgMap[item.id] = null;
-
             var msgWpapper = document.createElement('div');
             msgWpapper.setAttribute('id', item.id);
             this.historyBox.appendChild(msgWpapper);
-
             var root1 = document.getElementById(item.id).createShadowRoot();
             var template = this.msgFromTemplate(modelRoot.isLocalUser(item.user));
             this.renderItemState(template.children[1], item);
-
             root1.appendChild(template);
         }
     };
@@ -101,11 +93,9 @@ module.exports = (function () {
     DocumentView.prototype.msgFromTemplate = function (mode) {
         var template = document.getElementById('msg-template');
         var clone = document.importNode(template.content, true);
-
         if(mode){
             clone.children[1].classList.add('other');
         }
-
         return clone;
     };
 
@@ -129,7 +119,6 @@ module.exports = (function () {
         switch(mode) {
             case 'enabled':  this.sendButton.removeAttribute('disabled');
                 break;
-
             case 'disabled':  this.sendButton.removeAttribute('disabled');
         }
     };
@@ -152,7 +141,7 @@ module.exports = (function () {
 
     DocumentView.prototype.loadUser = function (model){
         this.username.innerHTML = model.user;
-    }
+    };
     return DocumentView;
 })();
 

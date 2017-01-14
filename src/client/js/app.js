@@ -7,20 +7,20 @@ var view = new DocumentView();
 var client = new Client();
 
 view.on('ready', run);
-view.on('sendButtonClick', onSendButton);
-view.on('editCompleteClick', onEditComplete);
-view.on('deleteClick', onDelete);
-view.on('editClick', onEdit);
-view.on('editCancelClick', onEditCancel);
-view.on('editUsernameClick', onEditUsername);
-view.on('editCompleteUsernameClick', onEditCompleteUsername);
+view.on('sendMsg', sendMsg);
+view.on('editMsgBegin', editMsgBegin);
+view.on('editMsgComplete', editMsgComplete);
+view.on('deleteMsg', deleteMsg);
+view.on('editMsgCancel', editMsgCancel);
+view.on('editUsernameBegin', editUsernameBegin);
+view.on('editUsernameComplete', editUsernameComplete);
 
 function run(){
     view.loadUser(model);
     view.newMessageBox.addEventListener('keypress', function(e){
         showTypeheads();
         if(e.keyCode == 13){
-            onSendButton(true);
+            sendMsg(true);
             e.preventDefault();
         }
         return false;
@@ -35,7 +35,7 @@ function run(){
     });
 }
 
-function onSendButton(enterkey){
+function sendMsg(enterkey){
     if(view.sendButton.getAttribute('disabled') && enterkey)
         return false;
 
@@ -50,12 +50,12 @@ function onSendButton(enterkey){
     });
 }
 
-function onEdit(evtObj){
+function editMsgBegin(evtObj){
     view.changeSendBtnState('enabled');
     view.setState(evtObj, 'edit');
 }
 
-function onEditComplete(evtObj){
+function editMsgComplete(evtObj){
     var current = view.getCurrentMsgContainer(evtObj);
     var input = current.getElementsByClassName('msg-editedText')[0];
 
@@ -69,7 +69,7 @@ function onEditComplete(evtObj){
     });
 }
 
-function onDelete(evtObj){
+function deleteMsg(evtObj){
     view.changeSendBtnState('enabled');
     var current = view.getCurrentMsgContainer(evtObj);
 
@@ -89,7 +89,7 @@ function doPolling(callback){
     loop();
 }
 
-function onEditCancel(evtObj){
+function editMsgCancel(evtObj){
     view.setState(evtObj, 'new');
 }
 
@@ -97,12 +97,12 @@ window.onerror = function(err) {
    // output(err.toString());
 };
 
-function onEditUsername(evtObj){
+function editUsernameBegin(evtObj){
     view.setUsernameState(evtObj, 'edit');
     view.inputUsername.focus();
 }
 
-function onEditCompleteUsername(evtObj){
+function editUsernameComplete(evtObj){
     model.user = view.getUsername();
     view.loadUser(model);
     view.setUsernameState(evtObj, 'initial');
