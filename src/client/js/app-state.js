@@ -24,6 +24,31 @@ module.exports = (function () {
             user: this.user
         }
     };
+
+    AppState.prototype.syncHistory = function (newMsg, callback){
+        if(newMsg.length === 0){
+            callback();
+            return;
+        }
+        var msgMap = this.history.reduce(function(accumulator, msg){
+            accumulator[msg.id] = msg;
+
+            return accumulator;
+        },{});
+
+        for(var i=0;i<newMsg.length;i++){
+            var id = newMsg[i].id;
+            var item = msgMap[id];
+
+            if(item == null){
+                this.history.push(newMsg[i]);
+                continue;
+            }
+            item.text = newMsg[i].text;
+            item.status = newMsg[i].status;
+        }
+        callback(true);
+    };
     
     return AppState;
 })();

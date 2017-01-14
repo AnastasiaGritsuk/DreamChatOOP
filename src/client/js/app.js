@@ -28,7 +28,7 @@ function run(){
 
     doPolling(function(chunk){
         model.token = chunk.token;
-        syncHistory(chunk.messages, function(needToRender){
+        model.syncHistory(chunk.messages, function(needToRender){
             if(needToRender)
                 view.render(model);
         });
@@ -91,31 +91,6 @@ function doPolling(callback){
 
 function onEditCancel(evtObj){
     view.setState(evtObj, 'new');
-}
-
-function syncHistory(newMsg, callback){
-    if(newMsg.length === 0){
-        callback();
-        return;
-    }
-    var msgMap = model.history.reduce(function(accumulator, msg){
-        accumulator[msg.id] = msg;
-
-        return accumulator;
-    },{});
-
-    for(var i=0;i<newMsg.length;i++){
-        var id = newMsg[i].id;
-        var item = msgMap[id];
-
-        if(item == null){
-            model.history.push(newMsg[i]);
-            continue;
-        }
-        item.text = newMsg[i].text;
-        item.status = newMsg[i].status;
-    }
-    callback(true);
 }
 
 window.onerror = function(err) {
