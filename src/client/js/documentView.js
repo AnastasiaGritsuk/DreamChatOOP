@@ -14,6 +14,12 @@ module.exports = (function () {
         document.addEventListener('click', (evtObj)=>{
             this.delegateEvent(evtObj);
         });
+        this.newMessageBox.addEventListener('keypress', (evtObj)=>{
+            if(evtObj.keyCode==13) {
+                this.emit('sendMsg', evtObj);
+                evtObj.preventDefault();
+            }
+        });
     }
 
     DocumentView.prototype.isProperElement = function(e, classname){
@@ -47,6 +53,10 @@ module.exports = (function () {
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon editOff-username')) {
             this.emit('editUsernameComplete', evtObj);
+            return;
+        }
+        if(evtObj.keyCode == 13) {
+            this.emit('sendMsg', evtObj);
             return;
         }
     };

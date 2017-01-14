@@ -17,15 +17,6 @@ view.on('editUsernameComplete', editUsernameComplete);
 
 function run(){
     view.loadUser(model);
-    view.newMessageBox.addEventListener('keypress', function(e){
-        showTypeheads();
-        if(e.keyCode == 13){
-            sendMsg(true);
-            e.preventDefault();
-        }
-        return false;
-    });
-
     doPolling(function(chunk){
         model.token = chunk.token;
         model.syncHistory(chunk.messages, function(needToRender){
