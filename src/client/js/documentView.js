@@ -55,10 +55,6 @@ module.exports = (function () {
             this.emit('editUsernameComplete', evtObj);
             return;
         }
-        if(evtObj.keyCode == 13) {
-            this.emit('sendMsg', evtObj);
-            return;
-        }
     };
 
     DocumentView.prototype.render = function (modelRoot) {
@@ -129,7 +125,7 @@ module.exports = (function () {
         switch(mode) {
             case 'enabled':  this.sendButton.removeAttribute('disabled');
                 break;
-            case 'disabled':  this.sendButton.removeAttribute('disabled');
+            case 'disabled':  this.sendButton.setAttribute('disabled','disabled');
         }
     };
 
