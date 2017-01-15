@@ -47,11 +47,8 @@ function editMsgComplete(evtObj){
 }
 
 function deleteMsg(evtObj){
-    view.changeSendBtnState('enabled');
-    var current = view.getCurrentMsgContainer(evtObj);
-
-    client.deleteMessage(model.mainUrl, current.id, function () {
-        view.changeSendBtnState('enabled');
+    client.deleteMessage(model.mainUrl, view.getUpdatedMsgId(evtObj), function () {
+        view.render(model.state.completeDeleting)
     });
 }
 

@@ -71,7 +71,7 @@ module.exports = (function () {
     };
 
     DocumentView.prototype.editMsgBegin = function (evtObj){
-        this.changeSendBtnState('enabled');
+        this.changeSendBtnState('disabled');
         this.setState(evtObj, 'edit');
     }
 
@@ -88,7 +88,7 @@ module.exports = (function () {
             return;
         }
 
-        if(modelRoot == 4) {
+        if(modelRoot == 4 || modelRoot == 6) {
             this.changeSendBtnState('enabled');
             return;
         }
