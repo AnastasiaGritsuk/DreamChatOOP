@@ -8,7 +8,6 @@ var client = new Client();
 
 view.on('ready', run);
 view.on('sendMsg', sendMsg);
-
 view.on('editMsgComplete', editMsgComplete);
 view.on('deleteMsg', deleteMsg);
 view.on('editMsgCancel', editMsgCancel);
@@ -37,16 +36,13 @@ function sendMsg(){
 }
 
 function editMsgComplete(evtObj){
-    var current = view.getCurrentMsgContainer(evtObj);
-    var input = current.getElementsByClassName('msg-editedText')[0];
-
     var updatedMessage = {
-        id: current.id,
-        text: input.value,
+        id: view.getUpdatedMsgId(evtObj),
+        text: view.getUpdatedMsg(evtObj),
         user: model.user
     };
     client.editMessage(model.mainUrl, updatedMessage, function () {
-        view.changeSendBtnState('enabled');
+        view.render(model.state.completeEditing);
     });
 }
 

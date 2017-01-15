@@ -27,6 +27,18 @@ module.exports = (function () {
         return e.path[1].className === classname;
     };
 
+    DocumentView.prototype.getUpdatedMsgId = function (evtObj) {
+        var current = this.getCurrentMsgContainer(evtObj);
+        return current.id;
+    };
+    
+    DocumentView.prototype.getUpdatedMsg = function (evtObj) {
+        var current = this.getCurrentMsgContainer(evtObj);
+        var input = current.getElementsByClassName('msg-editedText')[0];
+        
+        return input.value;
+    };
+    
     DocumentView.prototype.delegateEvent = function (evtObj){
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'btn sendButton')) {
             this.emit('sendMsg', evtObj);
@@ -73,6 +85,11 @@ module.exports = (function () {
         if(modelRoot == 2) {
             this.changeSendBtnState('enabled');
             this.newMessageBox.value = '';
+            return;
+        }
+
+        if(modelRoot == 4) {
+            this.changeSendBtnState('enabled');
             return;
         }
        
