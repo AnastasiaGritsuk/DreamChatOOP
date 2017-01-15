@@ -20,6 +20,7 @@ module.exports = (function () {
                 evtObj.preventDefault();
             }
         });
+        this.on('editMsgBegin', this.editMsgBegin);
     }
 
     DocumentView.prototype.isProperElement = function(e, classname){
@@ -57,6 +58,11 @@ module.exports = (function () {
         }
     };
 
+    DocumentView.prototype.editMsgBegin = function (evtObj){
+        this.changeSendBtnState('enabled');
+        this.setState(evtObj, 'edit');
+    }
+
     DocumentView.prototype.render = function (modelRoot) {
         if(modelRoot == 1) {
             if(this.sendButton.getAttribute('disabled'))
@@ -69,6 +75,7 @@ module.exports = (function () {
             this.newMessageBox.value = '';
             return;
         }
+       
         if(modelRoot.history.length === 0)
             return;
         var msgMap = modelRoot.history.reduce(function(accumulator, msg){

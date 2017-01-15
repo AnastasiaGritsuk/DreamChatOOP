@@ -8,7 +8,7 @@ var client = new Client();
 
 view.on('ready', run);
 view.on('sendMsg', sendMsg);
-view.on('editMsgBegin', editMsgBegin);
+
 view.on('editMsgComplete', editMsgComplete);
 view.on('deleteMsg', deleteMsg);
 view.on('editMsgCancel', editMsgCancel);
@@ -34,11 +34,6 @@ function sendMsg(){
     client.postMessage(model.mainUrl, newMessage, function () {
         view.render(model.state.finishSending);
     });
-}
-
-function editMsgBegin(evtObj){
-    view.changeSendBtnState('enabled');
-    view.setState(evtObj, 'edit');
 }
 
 function editMsgComplete(evtObj){
