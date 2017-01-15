@@ -27,17 +27,12 @@ function run(){
 }
 
 function sendMsg(){
-    if(view.sendButton.getAttribute('disabled'))
-        return false;
-
-    view.changeSendBtnState('disabled');
+    view.render(model.state.sending);
     var newMessage = model.theMessage(view.getNewMessage());
-    if(view.getNewMessage() == '')
+    if(newMessage == '')
         return;
-
-    view.newMessageBox.value = '';
     client.postMessage(model.mainUrl, newMessage, function () {
-        view.changeSendBtnState('enabled');
+        view.render(model.state.finishSending);
     });
 }
 

@@ -3,7 +3,16 @@ module.exports = (function () {
         this.user = 'User' + this.uniqueId(),
         this.mainUrl =  'http://localhost:8080/chat',
         this.history = [],
-        this.token =  ''
+        this.token =  '',
+        this.state = {
+            initial: 0,
+            sending: 1,
+            finishSending: 2,
+            beginEditing: 3,
+            completeEditing: 4,
+            beginDeleting: 5,
+            completeDeleting: 6
+        }
     }
 
     AppState.prototype.isLocalUser = function (user){

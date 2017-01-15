@@ -58,6 +58,17 @@ module.exports = (function () {
     };
 
     DocumentView.prototype.render = function (modelRoot) {
+        if(modelRoot == 1) {
+            if(this.sendButton.getAttribute('disabled'))
+                return;
+            this.changeSendBtnState('disabled');
+            return;
+        }        
+        if(modelRoot == 2) {
+            this.changeSendBtnState('enabled');
+            this.newMessageBox.value = '';
+            return;
+        }
         if(modelRoot.history.length === 0)
             return;
         var msgMap = modelRoot.history.reduce(function(accumulator, msg){
