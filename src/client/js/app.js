@@ -26,8 +26,8 @@ function run(){
     });
 }
 
-function sendMsg(enterkey){
-    if(view.sendButton.getAttribute('disabled') && enterkey)
+function sendMsg(){
+    if(view.sendButton.getAttribute('disabled'))
         return false;
 
     view.changeSendBtnState('disabled');
