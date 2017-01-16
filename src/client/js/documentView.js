@@ -20,9 +20,6 @@ module.exports = (function () {
                 evtObj.preventDefault();
             }
         });
-        this.on('editMsgBegin', this.editMsgBegin);
-        this.on('editMsgCancel', this.editMsgCancel);
-        this.on('editUsernameBegin', this.editUsernameBegin);
     }
 
     DocumentView.prototype.isProperElement = function(e, classname){
@@ -47,7 +44,7 @@ module.exports = (function () {
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon edit')) {
-            this.emit('editMsgBegin', evtObj);
+            this.editMsgBegin(evtObj);
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon complete')) {
@@ -55,7 +52,7 @@ module.exports = (function () {
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon cancel')) {
-            this.emit('editMsgCancel', evtObj);
+            editMsgCancel(evtObj);
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon delete')) {
@@ -63,7 +60,7 @@ module.exports = (function () {
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon editOn-username')) {
-            this.emit('editUsernameBegin', evtObj);
+            editUsernameBegin(evtObj);
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon editOff-username')) {
