@@ -21,6 +21,8 @@ module.exports = (function () {
             }
         });
         this.on('editMsgBegin', this.editMsgBegin);
+        this.on('editMsgCancel', this.editMsgCancel);
+        this.on('editUsernameBegin', this.editUsernameBegin);
     }
 
     DocumentView.prototype.isProperElement = function(e, classname){
@@ -73,7 +75,16 @@ module.exports = (function () {
     DocumentView.prototype.editMsgBegin = function (evtObj){
         this.changeSendBtnState('disabled');
         this.setState(evtObj, 'edit');
-    }
+    };
+
+    DocumentView.prototype.editMsgCancel = function(evtObj){
+        this.setState(evtObj, 'new');
+    };
+
+    DocumentView.prototype.editUsernameBegin = function(evtObj){
+        this.setUsernameState(evtObj, 'edit');
+        this.inputUsername.focus();
+    };
 
     DocumentView.prototype.render = function (modelRoot) {
         if(modelRoot == 1) {

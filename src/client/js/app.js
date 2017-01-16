@@ -10,8 +10,8 @@ view.on('ready', run);
 view.on('sendMsg', sendMsg);
 view.on('editMsgComplete', editMsgComplete);
 view.on('deleteMsg', deleteMsg);
-view.on('editMsgCancel', editMsgCancel);
-view.on('editUsernameBegin', editUsernameBegin);
+
+
 view.on('editUsernameComplete', editUsernameComplete);
 
 function run(){
@@ -63,18 +63,9 @@ function doPolling(callback){
     loop();
 }
 
-function editMsgCancel(evtObj){
-    view.setState(evtObj, 'new');
-}
-
 window.onerror = function(err) {
    // output(err.toString());
 };
-
-function editUsernameBegin(evtObj){
-    view.setUsernameState(evtObj, 'edit');
-    view.inputUsername.focus();
-}
 
 function editUsernameComplete(evtObj){
     model.user = view.getUsername();
