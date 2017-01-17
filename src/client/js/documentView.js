@@ -91,7 +91,7 @@ module.exports = (function () {
 
     DocumentView.prototype.sendMsg = function () {
         var newMsg = this.newMessageBox.value;
-        this.emit('sendMsg', newMsg);
+        this.emit('sendMsg', newMsg.trim());
     };
 
     DocumentView.prototype.deleteMsg = function (evtObj) {

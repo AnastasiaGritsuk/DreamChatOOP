@@ -24,10 +24,9 @@ function run(){
 }
 
 function sendMsg(newMsg){
+    if(newMsg.length == 0) return;
     view.render(model.state.sending);
     var newMessage = model.theMessage(newMsg);
-    if(newMessage == '')
-        return;
     client.postMessage(model.mainUrl, newMessage, function () {
         view.render(model.state.finishSending);
     }, function (error) {
