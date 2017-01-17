@@ -57,15 +57,14 @@ module.exports = (function () {
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon delete')) {
             this.deleteMsg(evtObj);
-
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon editOn-username')) {
-            editUsernameBegin(evtObj);
+            this.editUsernameBegin(evtObj);
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon editOff-username')) {
-            this.emit('editUsernameComplete', evtObj);
+            this.editUsernameComplete(evtObj);
             return;
         }
     };
@@ -98,6 +97,12 @@ module.exports = (function () {
     DocumentView.prototype.deleteMsg = function (evtObj) {
         var id = this.getUpdatedMsgId(evtObj);
         this.emit('deleteMsg', id);
+    };
+    
+    DocumentView.prototype.editUsernameComplete = function (evtObj) {
+        var user = this.getUsername();
+        this.setUsernameState(evtObj, 'initial');
+        this.emit('editUsernameComplete', user);
     };
 
     DocumentView.prototype.render = function (modelRoot) {

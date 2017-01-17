@@ -65,10 +65,9 @@ window.onerror = function(err) {
    // output(err.toString());
 };
 
-function editUsernameComplete(evtObj){
-    model.user = view.getUsername();
+function editUsernameComplete(user){
+    model.user = user;
     view.loadUser(model);
-    view.setUsernameState(evtObj, 'initial');
 }
 
 function changeServer(){}
