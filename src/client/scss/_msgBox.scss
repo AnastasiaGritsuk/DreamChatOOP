@@ -33,6 +33,10 @@
         background: #F5F4EB;
         font-size: 22px;
         border: none;
+
+        &[disabled]{
+            pointer-events: none;
+        }
     }
 }
 
