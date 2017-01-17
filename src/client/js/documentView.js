@@ -48,7 +48,7 @@ module.exports = (function () {
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon complete')) {
-            this.emit('editMsgComplete', evtObj);
+            this.editMsgComplete(evtObj);
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon cancel')) {
@@ -81,6 +81,12 @@ module.exports = (function () {
     DocumentView.prototype.editUsernameBegin = function(evtObj){
         this.setUsernameState(evtObj, 'edit');
         this.inputUsername.focus();
+    };
+    
+    DocumentView.prototype.editMsgComplete = function (evtObj) {
+        var id = this.getUpdatedMsgId(evtObj);
+        var text = this.getUpdatedMsg(evtObj);
+        this.emit('editMsgComplete', id, text);
     };
 
     DocumentView.prototype.render = function (modelRoot) {

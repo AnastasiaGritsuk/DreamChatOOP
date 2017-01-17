@@ -10,8 +10,6 @@ view.on('ready', run);
 view.on('sendMsg', sendMsg);
 view.on('editMsgComplete', editMsgComplete);
 view.on('deleteMsg', deleteMsg);
-
-
 view.on('editUsernameComplete', editUsernameComplete);
 
 function run(){
@@ -35,10 +33,10 @@ function sendMsg(){
     });
 }
 
-function editMsgComplete(evtObj){
+function editMsgComplete(id, text){
     var updatedMessage = {
-        id: view.getUpdatedMsgId(evtObj),
-        text: view.getUpdatedMsg(evtObj),
+        id: id,
+        text: text,
         user: model.user
     };
     client.editMessage(model.mainUrl, updatedMessage, function () {
