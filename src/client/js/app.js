@@ -44,8 +44,8 @@ function editMsgComplete(id, text){
     });
 }
 
-function deleteMsg(evtObj){
-    client.deleteMessage(model.mainUrl, view.getUpdatedMsgId(evtObj), function () {
+function deleteMsg(id){
+    client.deleteMessage(model.mainUrl, id, function () {
         view.render(model.state.completeDeleting)
     });
 }

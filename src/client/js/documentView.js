@@ -30,7 +30,7 @@ module.exports = (function () {
         var current = this.getCurrentMsgContainer(evtObj);
         return current.id;
     };
-    
+
     DocumentView.prototype.getUpdatedMsg = function (evtObj) {
         var current = this.getCurrentMsgContainer(evtObj);
         var input = current.getElementsByClassName('msg-editedText')[0];
@@ -56,7 +56,8 @@ module.exports = (function () {
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon delete')) {
-            this.emit('deleteMsg', evtObj);
+            this.deleteMsg(evtObj);
+
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon editOn-username')) {
@@ -92,6 +93,11 @@ module.exports = (function () {
     DocumentView.prototype.sendMsg = function () {
         var newMsg = this.newMessageBox.value;
         this.emit('sendMsg', newMsg);
+    };
+
+    DocumentView.prototype.deleteMsg = function (evtObj) {
+        var id = this.getUpdatedMsgId(evtObj);
+        this.emit('deleteMsg', id);
     };
 
     DocumentView.prototype.render = function (modelRoot) {
