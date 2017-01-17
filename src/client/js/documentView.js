@@ -16,7 +16,7 @@ module.exports = (function () {
         });
         this.newMessageBox.addEventListener('keypress', (evtObj)=>{
             if(evtObj.keyCode==13) {
-                this.emit('sendMsg', evtObj);
+                this.sendMsg();
                 evtObj.preventDefault();
             }
         });
@@ -40,7 +40,7 @@ module.exports = (function () {
     
     DocumentView.prototype.delegateEvent = function (evtObj){
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'btn sendButton')) {
-            this.emit('sendMsg', evtObj);
+            this.sendMsg();
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon edit')) {
@@ -87,6 +87,11 @@ module.exports = (function () {
         var id = this.getUpdatedMsgId(evtObj);
         var text = this.getUpdatedMsg(evtObj);
         this.emit('editMsgComplete', id, text);
+    };
+
+    DocumentView.prototype.sendMsg = function () {
+        var newMsg = this.newMessageBox.value;
+        this.emit('sendMsg', newMsg);
     };
 
     DocumentView.prototype.render = function (modelRoot) {
@@ -184,10 +189,6 @@ module.exports = (function () {
     
     DocumentView.prototype.getUsername = function () {
         return this.inputUsername.value;
-    };
-    
-    DocumentView.prototype.getNewMessage = function () {
-        return this.newMessageBox.value;
     };
     
     DocumentView.prototype.setUsernameState = function (evtObj, state) {

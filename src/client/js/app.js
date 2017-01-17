@@ -23,9 +23,9 @@ function run(){
     });
 }
 
-function sendMsg(){
+function sendMsg(newMsg){
     view.render(model.state.sending);
-    var newMessage = model.theMessage(view.getNewMessage());
+    var newMessage = model.theMessage(newMsg);
     if(newMessage == '')
         return;
     client.postMessage(model.mainUrl, newMessage, function () {
