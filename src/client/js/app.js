@@ -30,6 +30,8 @@ function sendMsg(newMsg){
         return;
     client.postMessage(model.mainUrl, newMessage, function () {
         view.render(model.state.finishSending);
+    }, function (error) {
+        console.log('Error was occurred ' + error);
     });
 }
 
@@ -41,12 +43,16 @@ function editMsgComplete(id, text){
     };
     client.editMessage(model.mainUrl, updatedMessage, function () {
         view.render(model.state.completeEditing);
+    }, function (error) {
+        console.log('Error was occurred ' + error);
     });
 }
 
 function deleteMsg(id){
     client.deleteMessage(model.mainUrl, id, function () {
         view.render(model.state.completeDeleting)
+    }, function (error) {
+        console.log('Error was occurred ' + error);
     });
 }
 
@@ -61,14 +67,14 @@ function doPolling(callback){
     loop();
 }
 
-window.onerror = function(err) {
-   // output(err.toString());
-};
-
 function editUsernameComplete(user){
     model.user = user;
     view.loadUser(model);
 }
+
+window.onerror = function(err) {
+   // output(err.toString());
+};
 
 function changeServer(){}
 

@@ -44,27 +44,35 @@ module.exports = (function () {
         return !!obj.error;
     };
 
-    Client.prototype.getHistory = function (url, token, continueWith) {
+    Client.prototype.getHistory = function (url, token, continueWith, continueWithError) {
         this.ajax('GET', url + '?token=' + token, null, function(response){
             continueWith(response);
+        }, function (error) {
+            continueWithError(error);
         });
     };
 
-    Client.prototype.postMessage = function (url, message, continueWith) {
+    Client.prototype.postMessage = function (url, message, continueWith, continueWithError) {
         this.ajax('POST', url, JSON.stringify(message), function(response){
             continueWith(response);
+        },function (error) {
+            continueWithError(error);
         });
     };
 
-    Client.prototype.editMessage = function (url, updatedMessage, continueWith) {
+    Client.prototype.editMessage = function (url, updatedMessage, continueWith, continueWithError) {
         this.ajax('PUT', url, JSON.stringify(updatedMessage), function(response){
             continueWith(response);
+        },function (error) {
+            continueWithError(error);
         });
     };
     
-    Client.prototype.deleteMessage = function (url, id, continueWith) {
+    Client.prototype.deleteMessage = function (url, id, continueWith, continueWithError) {
         this.ajax('DELETE', url + '/'  + 'delete(' + id + ')', null, function(response){
             continueWith(response);
+        },function (error) {
+            continueWithError(error);
         });
     };
 
