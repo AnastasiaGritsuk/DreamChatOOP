@@ -16,10 +16,10 @@ function run(){
     view.loadUser(model);
     doPolling(function(chunk){
         model.token = chunk.token;
-        model.syncHistory(chunk.messages, function(needToRender){
-            if(needToRender)
-                view.render(model);
-        });
+        if(chunk.messages.length !== 0) {
+            model.syncHistory(chunk.messages);
+            view.render(model);
+        }
     });
 }
 

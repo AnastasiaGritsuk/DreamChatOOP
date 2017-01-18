@@ -33,11 +33,7 @@ module.exports = (function () {
         }
     };
 
-    AppState.prototype.syncHistory = function (newMsg, callback){
-        if(newMsg.length === 0){
-            callback();
-            return;
-        }
+    AppState.prototype.syncHistory = function (newMsg){
         var msgMap = this.history.reduce(function(accumulator, msg){
             accumulator[msg.id] = msg;
 
@@ -55,7 +51,6 @@ module.exports = (function () {
             item.text = newMsg[i].text;
             item.status = newMsg[i].status;
         }
-        callback(true);
     };
     
     return AppState;

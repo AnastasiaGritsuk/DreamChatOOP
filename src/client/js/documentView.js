@@ -52,7 +52,7 @@ module.exports = (function () {
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon cancel')) {
-            editMsgCancel(evtObj);
+            this.editMsgCancel(evtObj);
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon delete')) {
@@ -211,4 +211,3 @@ module.exports = (function () {
     };
     return DocumentView;
 })();
-
