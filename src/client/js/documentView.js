@@ -22,8 +22,8 @@ module.exports = (function () {
         });
     }
 
-    DocumentView.prototype.isProperElement = function(e, classname){
-        return e.path[1].className === classname;
+    DocumentView.prototype.isProperElement = function(target, className){
+        return target.className === className;
     };
 
     DocumentView.prototype.getUpdatedMsgId = function (evtObj) {
@@ -39,31 +39,32 @@ module.exports = (function () {
     };
     
     DocumentView.prototype.delegateEvent = function (evtObj){
-        if(evtObj.type == 'click' && this.isProperElement(evtObj, 'btn sendButton')) {
+        var target = evtObj.path[1];
+        if(evtObj.type == 'click' && this.isProperElement(target, 'icon-location-arrow')) {
             this.sendMsg();
             return;
         }
-        if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon edit')) {
+        if(evtObj.type == 'click' && this.isProperElement(target, 'icon edit')) {
             this.editMsgBegin(evtObj);
             return;
         }
-        if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon complete')) {
+        if(evtObj.type == 'click' && this.isProperElement(target, 'icon complete')) {
             this.editMsgComplete(evtObj);
             return;
         }
-        if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon cancel')) {
+        if(evtObj.type == 'click' && this.isProperElement(target, 'icon cancel')) {
             this.editMsgCancel(evtObj);
             return;
         }
-        if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon delete')) {
+        if(evtObj.type == 'click' && this.isProperElement(target, 'icon delete')) {
             this.deleteMsg(evtObj);
             return;
         }
-        if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon editOn-username')) {
+        if(evtObj.type == 'click' && this.isProperElement(target, 'icon editOn-username')) {
             this.editUsernameBegin(evtObj);
             return;
         }
-        if(evtObj.type == 'click' && this.isProperElement(evtObj, 'icon editOff-username')) {
+        if(evtObj.type == 'click' && this.isProperElement(target, 'icon editOff-username')) {
             this.editUsernameComplete(evtObj);
             return;
         }
