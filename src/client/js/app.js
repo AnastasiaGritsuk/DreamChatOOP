@@ -30,7 +30,7 @@ function sendMsg(newMsg){
     client.postMessage(model.mainUrl, newMessage, function () {
         view.render(model.state.finishSending);
     }, function (error) {
-        console.log('Error was occurred ' + error);
+        errorHandler(error);
     });
 }
 
@@ -43,7 +43,7 @@ function editMsgComplete(id, text){
     client.editMessage(model.mainUrl, updatedMessage, function () {
         view.render(model.state.completeEditing);
     }, function (error) {
-        console.log('Error was occurred ' + error);
+        errorHandler(error);
     });
 }
 
@@ -51,7 +51,7 @@ function deleteMsg(id){
     client.deleteMessage(model.mainUrl, id, function () {
         view.render(model.state.completeDeleting)
     }, function (error) {
-        console.log('Error was occurred ' + error);
+        errorHandler(error);
     });
 }
 
@@ -71,8 +71,11 @@ function editUsernameComplete(user){
     view.loadUser(model);
 }
 
+function errorHandler(error) {
+    console.error(error);
+}
 window.onerror = function(err) {
-   // output(err.toString());
+    errorHandler(err);
 };
 
 function changeServer(){}
