@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = (function () {
     function AppState() {
         this.user = 'User' + this.uniqueId(),

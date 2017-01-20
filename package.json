@@ -10,7 +10,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "build": "browserify src/client/js/app.js -o src/client/js/bundle.js"
+    "build": "browserify src/client/js/bootstrap.js -o src/client/js/bundle.js"
   },
   "repository": {
     "type": "git",

@@ -1,3 +1,5 @@
+'use strict';
+
 var Emitter = require('component-emitter');
 
 module.exports = (function () {
