@@ -33,24 +33,31 @@ module.exports = (function () {
         }
     };
 
-    AppState.prototype.syncHistory = function (newMsg){
+    AppState.prototype.syncHistory = function (token, messages){
+        this.token = token;
+        
+        if(messages.length == 0) 
+            return false;
+        
         var msgMap = this.history.reduce(function(accumulator, msg){
             accumulator[msg.id] = msg;
 
             return accumulator;
         },{});
 
-        for(var i=0;i<newMsg.length;i++){
-            var id = newMsg[i].id;
+        for(var i=0;i<messages.length;i++){
+            var id = messages[i].id;
             var item = msgMap[id];
 
             if(item == null){
-                this.history.push(newMsg[i]);
+                this.history.push(messages[i]);
                 continue;
             }
-            item.text = newMsg[i].text;
-            item.status = newMsg[i].status;
+            item.text = messages[i].text;
+            item.status = messages[i].status;
         }
+        
+        return true;
     };
     
     return AppState;

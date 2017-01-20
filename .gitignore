@@ -3,3 +3,8 @@ node_modules/
 /history.txt
 .sass-cache/
 /bundle.js
+
+/.idea/
+.idea/**
+.idea/workspace.xml
+src/client/js/bundle.js

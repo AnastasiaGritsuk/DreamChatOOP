@@ -15,9 +15,7 @@ view.on('editUsernameComplete', editUsernameComplete);
 function run(){
     view.loadUser(model);
     doPolling(function(chunk){
-        model.token = chunk.token;
-        if(chunk.messages.length !== 0) {
-            model.syncHistory(chunk.messages);
+        if(model.syncHistory(chunk.token, chunk.messages)) {
             view.render(model);
         }
     });
