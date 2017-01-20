@@ -1,10 +1,7 @@
 *.orig
-node_modules/
+/node_modules
+/.idea
 /history.txt
 .sass-cache/
-/bundle.js
+bundle.js
 
-/.idea/
-.idea/**
-.idea/workspace.xml
-src/client/js/bundle.js
