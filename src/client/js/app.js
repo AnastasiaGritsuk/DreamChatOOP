@@ -83,6 +83,7 @@ module.exports = (function () {
 
     App.prototype.showTypeheads = function() {
         // $('.typeahead').typeahead();
+}
     };
     
     return App;
