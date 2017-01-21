@@ -33,6 +33,8 @@ module.exports = (function () {
 
                 callback(answer);
                 setTimeout(loop, 1000);
+            },(error)=> {
+                this.errorHandler(error);
             });
         };
 
@@ -48,7 +50,7 @@ module.exports = (function () {
         this.client.postMessage(this.model.mainUrl, newMessage, () => {
             this.view.render(this.model.state.finishSending);
         }, (error)=> {
-            console.log('Error was occurred ' + error);
+            this.errorHandler(error);
         });
     };
 
@@ -61,7 +63,7 @@ module.exports = (function () {
         this.client.editMessage(this.model.mainUrl, updatedMessage, ()=> {
             this.view.render(this.model.state.completeEditing);
         }, (error)=> {
-            console.log('Error was occurred ' + error);
+            this.errorHandler(error);
         });
     };
 
@@ -69,7 +71,7 @@ module.exports = (function () {
         this.client.deleteMessage(this.model.mainUrl, id,  ()=> {
             this.view.render(this.model.state.completeDeleting)
         },  (error)=> {
-            console.log('Error was occurred ' + error);
+            this.errorHandler(error);
         });
     };
 
@@ -83,6 +85,10 @@ module.exports = (function () {
 
     App.prototype.showTypeheads = function() {
         // $('.typeahead').typeahead();
+    };
+
+    App.prototype.errorHandler = function (error) {
+        console.log('Error was occurred ' + error);
     };
     
     return App;
