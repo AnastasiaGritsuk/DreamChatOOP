@@ -44,11 +44,13 @@ module.exports = (function () {
     App.prototype.sendMsg = function (newMsg) {
         if (newMsg.length == 0)
             return;
-
-        this.view.render(this.model.state.sending);
+        
+        this.model.mode = 'sending';
+        this.view.render(this.model);
         var newMessage = this.model.theMessage(newMsg);
         this.client.postMessage(this.model.mainUrl, newMessage, () => {
-            this.view.render(this.model.state.finishSending);
+            this.model.mode = 'finishSending';
+            this.view.render(this.model);
         }, (error)=> {
             this.errorHandler(error);
         });
@@ -61,7 +63,8 @@ module.exports = (function () {
             user: this.model.user
         };
         this.client.editMessage(this.model.mainUrl, updatedMessage, ()=> {
-            this.view.render(this.model.state.completeEditing);
+            this.model.mode = 'completeEditing';
+            this.view.render(this.model);
         }, (error)=> {
             this.errorHandler(error);
         });
@@ -69,7 +72,8 @@ module.exports = (function () {
 
     App.prototype.deleteMsg = function (id) {
         this.client.deleteMessage(this.model.mainUrl, id,  ()=> {
-            this.view.render(this.model.state.completeDeleting)
+            this.model.mode = 'completeDeleting';
+            this.view.render(this.model);
         },  (error)=> {
             this.errorHandler(error);
         });

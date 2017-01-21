@@ -107,23 +107,29 @@ module.exports = (function () {
         this.emit('editUsernameComplete', user);
     };
 
-    DocumentView.prototype.render = function (modelRoot) {
-        if(modelRoot == 1) {
+    DocumentView.prototype.renderMode = function (mode) {
+        if(mode == 'sending') {
             if(this.sendButton.getAttribute('disabled'))
                 return;
             this.changeSendBtnState('disabled');
             return;
-        }        
-        if(modelRoot == 2) {
+        }
+        if(mode == 'finishSending') {
             this.changeSendBtnState('enabled');
             this.newMessageBox.value = '';
             return;
         }
 
-        if(modelRoot == 4 || modelRoot == 6) {
+        if(mode == 'completeEditing' || mode == 'completeDeleting') {
             this.changeSendBtnState('enabled');
             return;
         }
+    };
+
+    DocumentView.prototype.render = function (modelRoot) {
+        console.assert(modelRoot !== null);
+        
+        this.renderMode(modelRoot.mode);
        
         if(modelRoot.history.length === 0)
             return;
