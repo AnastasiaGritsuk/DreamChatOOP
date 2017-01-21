@@ -44,8 +44,8 @@ module.exports = (function () {
     App.prototype.sendMsg = function (newMsg) {
         if (newMsg.length == 0)
             return;
-        
-        this.model.mode = 'sending';
+
+        this.model.mode = 'started';
         this.view.render(this.model);
         var newMessage = this.model.theMessage(newMsg);
         this.client.postMessage(this.model.mainUrl, newMessage, () => {
@@ -63,7 +63,7 @@ module.exports = (function () {
             user: this.model.user
         };
         this.client.editMessage(this.model.mainUrl, updatedMessage, ()=> {
-            this.model.mode = 'completeEditing';
+            this.model.mode = 'completed';
             this.view.render(this.model);
         }, (error)=> {
             this.errorHandler(error);
@@ -71,8 +71,10 @@ module.exports = (function () {
     };
 
     App.prototype.deleteMsg = function (id) {
+        this.model.mode = 'started';
+        this.view.render(this.model);
         this.client.deleteMessage(this.model.mainUrl, id,  ()=> {
-            this.model.mode = 'completeDeleting';
+            this.model.mode = 'completed';
             this.view.render(this.model);
         },  (error)=> {
             this.errorHandler(error);
@@ -82,6 +84,8 @@ module.exports = (function () {
     App.prototype.editUsernameComplete = function (user) {
         this.model.user = user;
         this.view.loadUser(this.model);
+        this.model.mode = 'completed';
+        this.view.render(this.model);
     };
 
     App.prototype.changeServer = function () {

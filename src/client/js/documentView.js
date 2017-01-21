@@ -108,7 +108,7 @@ module.exports = (function () {
     };
 
     DocumentView.prototype.renderMode = function (mode) {
-        if(mode == 'sending') {
+        if(mode == 'started') {
             if(this.sendButton.getAttribute('disabled'))
                 return;
             this.changeSendBtnState('disabled');
@@ -120,7 +120,7 @@ module.exports = (function () {
             return;
         }
 
-        if(mode == 'completeEditing' || mode == 'completeDeleting') {
+        if(mode == 'completed') {
             this.changeSendBtnState('enabled');
             return;
         }
