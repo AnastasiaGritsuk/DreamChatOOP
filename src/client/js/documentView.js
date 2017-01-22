@@ -102,7 +102,7 @@ module.exports = (function () {
     };
     
     DocumentView.prototype.editUsernameComplete = function (evtObj) {
-        var user = this.getUsername();
+        var user = this.inputUsername.value;
         this.setUsernameState(evtObj, 'initial');
         this.emit('editUsernameComplete', user);
     };
@@ -130,20 +130,24 @@ module.exports = (function () {
         this.username.innerHTML = user;
     };
 
+    DocumentView.prototype.renderHistory = function (history) {
+        if(history.length === 0)
+            return;
+        var msgMap = history.reduce(function(accumulator, msg){
+            accumulator[msg.id] = msg;
+            return accumulator;
+        },{});
+        this.updateList(this.historyBox, msgMap);
+        this.appendToList(this.historyBox, history, msgMap);
+    };
+
     DocumentView.prototype.render = function (modelRoot) {
         console.assert(modelRoot !== null);
         
         this.renderMode(modelRoot.mode);
         this.renderUser(modelRoot.user);
-       
-        if(modelRoot.history.length === 0)
-            return;
-        var msgMap = modelRoot.history.reduce(function(accumulator, msg){
-            accumulator[msg.id] = msg;
-            return accumulator;
-        },{});
-        this.updateList(this.historyBox, msgMap);
-        this.appendToList(this.historyBox, modelRoot.history, msgMap, modelRoot);
+        //this.renderServerList(modelRoot.serverList);
+        this.renderHistory(modelRoot.history);
     };
 
     DocumentView.prototype.updateList = function (element, msgMap) {
@@ -157,7 +161,7 @@ module.exports = (function () {
         }
     };
 
-    DocumentView.prototype.appendToList = function (element, items, msgMap, modelRoot) {
+    DocumentView.prototype.appendToList = function (element, items, msgMap) {
         for(var i=0; i<items.length; i++){
             var item = items[i];
 
@@ -168,16 +172,16 @@ module.exports = (function () {
             msgWpapper.setAttribute('id', item.id);
             this.historyBox.appendChild(msgWpapper);
             var root1 = document.getElementById(item.id).createShadowRoot();
-            var template = this.msgFromTemplate(modelRoot.isLocalUser(item.user));
+            var template = this.msgFromTemplate(item.user);
             this.renderItemState(template.children[1], item);
             root1.appendChild(template);
         }
     };
 
-    DocumentView.prototype.msgFromTemplate = function (mode) {
+    DocumentView.prototype.msgFromTemplate = function (user) {
         var template = document.getElementById('msg-template');
         var clone = document.importNode(template.content, true);
-        if(mode){
+        if(user !== this.getUsername()){
             clone.children[1].classList.add('other');
         }
         return clone;
@@ -212,7 +216,7 @@ module.exports = (function () {
     };
     
     DocumentView.prototype.getUsername = function () {
-        return this.inputUsername.value;
+        return this.username.innerHTML;
     };
     
     DocumentView.prototype.setUsernameState = function (evtObj, state) {

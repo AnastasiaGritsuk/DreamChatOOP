@@ -5,21 +5,9 @@ module.exports = (function () {
         this.user = 'User' + this.uniqueId(),
         this.mainUrl =  'http://localhost:8080/chat',
         this.history = [],
-        this.token =  '',
-        // this.mode = {
-        //     sending: 1,
-        //     finishSending: 2,
-        //     completeEditing: 4,
-        //     beginDeleting: 5,
-        //     completeDeleting: 6
-        // }
-        
+        this.token =  '',        
         this.mode = {};
     }
-
-    AppState.prototype.isLocalUser = function (user){
-        return user != this.user;
-    };
 
     AppState.prototype.uniqueId = function() {
         var date = Date.now();
