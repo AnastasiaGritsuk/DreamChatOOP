@@ -18,7 +18,7 @@ module.exports = (function () {
     }
 
     App.prototype.run = function () {
-        this.view.loadUser(this.model);
+        this.view.render(this.model);
         this.doPolling((chunk)=> {
             if (this.model.syncHistory(chunk.token, chunk.messages)) {
                 this.view.render(this.model);
@@ -83,7 +83,6 @@ module.exports = (function () {
 
     App.prototype.editUsernameComplete = function (user) {
         this.model.user = user;
-        this.view.loadUser(this.model);
         this.model.mode = 'completed';
         this.view.render(this.model);
     };

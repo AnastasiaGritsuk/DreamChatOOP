@@ -126,10 +126,15 @@ module.exports = (function () {
         }
     };
 
+    DocumentView.prototype.renderUser = function (user) {
+        this.username.innerHTML = user;
+    };
+
     DocumentView.prototype.render = function (modelRoot) {
         console.assert(modelRoot !== null);
         
         this.renderMode(modelRoot.mode);
+        this.renderUser(modelRoot.user);
        
         if(modelRoot.history.length === 0)
             return;
@@ -214,8 +219,5 @@ module.exports = (function () {
         this.getUsernameContainer(evtObj).dataset.state = state;
     };
 
-    DocumentView.prototype.loadUser = function (model){
-        this.username.innerHTML = model.user;
-    };
     return DocumentView;
 })();
