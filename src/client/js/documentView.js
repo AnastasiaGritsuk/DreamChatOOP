@@ -1,3 +1,5 @@
+'use strict';
+
 var Emitter = require('component-emitter');
 
 module.exports = (function () {
@@ -101,37 +103,52 @@ module.exports = (function () {
     };
     
     DocumentView.prototype.editUsernameComplete = function (evtObj) {
-        var user = this.getUsername();
+        var user = this.inputUsername.value;
         this.setUsernameState(evtObj, 'initial');
         this.emit('editUsernameComplete', user);
     };
 
-    DocumentView.prototype.render = function (modelRoot) {
-        if(modelRoot == 1) {
+    DocumentView.prototype.renderMode = function (mode) {
+        if(mode == 'started') {
             if(this.sendButton.getAttribute('disabled'))
                 return;
             this.changeSendBtnState('disabled');
             return;
-        }        
-        if(modelRoot == 2) {
+        }
+        if(mode == 'finishSending') {
             this.changeSendBtnState('enabled');
             this.newMessageBox.value = '';
             return;
         }
 
-        if(modelRoot == 4 || modelRoot == 6) {
+        if(mode == 'completed') {
             this.changeSendBtnState('enabled');
             return;
         }
-       
-        if(modelRoot.history.length === 0)
+    };
+
+    DocumentView.prototype.renderUser = function (user) {
+        this.username.innerHTML = user;
+    };
+
+    DocumentView.prototype.renderHistory = function (history) {
+        if(history.length === 0)
             return;
-        var msgMap = modelRoot.history.reduce(function(accumulator, msg){
+        var msgMap = history.reduce(function(accumulator, msg){
             accumulator[msg.id] = msg;
             return accumulator;
         },{});
         this.updateList(this.historyBox, msgMap);
-        this.appendToList(this.historyBox, modelRoot.history, msgMap, modelRoot);
+        this.appendToList(this.historyBox, history, msgMap);
+    };
+
+    DocumentView.prototype.render = function (modelRoot) {
+        console.assert(modelRoot !== null);
+        
+        this.renderMode(modelRoot.mode);
+        this.renderUser(modelRoot.user);
+        //this.renderServerList(modelRoot.serverList);
+        this.renderHistory(modelRoot.history);
     };
 
     DocumentView.prototype.updateList = function (element, msgMap) {
@@ -145,7 +162,7 @@ module.exports = (function () {
         }
     };
 
-    DocumentView.prototype.appendToList = function (element, items, msgMap, modelRoot) {
+    DocumentView.prototype.appendToList = function (element, items, msgMap) {
         for(var i=0; i<items.length; i++){
             var item = items[i];
 
@@ -156,16 +173,16 @@ module.exports = (function () {
             msgWpapper.setAttribute('id', item.id);
             this.historyBox.appendChild(msgWpapper);
             var root1 = document.getElementById(item.id).createShadowRoot();
-            var template = this.msgFromTemplate(modelRoot.isLocalUser(item.user));
+            var template = this.msgFromTemplate(item.user);
             this.renderItemState(template.children[1], item);
             root1.appendChild(template);
         }
     };
 
-    DocumentView.prototype.msgFromTemplate = function (mode) {
+    DocumentView.prototype.msgFromTemplate = function (user) {
         var template = document.getElementById('msg-template');
         var clone = document.importNode(template.content, true);
-        if(mode){
+        if(user !== this.getUsername()){
             clone.children[1].classList.add('other');
         }
         return clone;
@@ -200,15 +217,12 @@ module.exports = (function () {
     };
     
     DocumentView.prototype.getUsername = function () {
-        return this.inputUsername.value;
+        return this.username.innerHTML;
     };
     
     DocumentView.prototype.setUsernameState = function (evtObj, state) {
         this.getUsernameContainer(evtObj).dataset.state = state;
     };
 
-    DocumentView.prototype.loadUser = function (model){
-        this.username.innerHTML = model.user;
-    };
     return DocumentView;
 })();

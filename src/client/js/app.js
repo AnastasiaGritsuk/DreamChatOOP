@@ -1,85 +1,106 @@
-var AppState = require('./app-state');
-var DocumentView = require('./documentView');
-var Client = require('./client');
+'use strict';
 
-var model = new AppState();
-var view = new DocumentView();
-var client = new Client();
+module.exports = (function () {
+    function App(client, view, model) {
+        this.client = client;
+        this.view = view;
+        this.model = model;
 
-view.on('ready', run);
-view.on('sendMsg', sendMsg);
-view.on('editMsgComplete', editMsgComplete);
-view.on('deleteMsg', deleteMsg);
-view.on('editUsernameComplete', editUsernameComplete);
+        view.on('ready', ()=> this.run());
+        view.on('sendMsg', (newMsg)=> this.sendMsg(newMsg));
+        view.on('editMsgComplete', (id, text)=> this.editMsgComplete(id, text));
+        view.on('deleteMsg', (id)=> this.deleteMsg(id));
+        view.on('editUsernameComplete', (user)=> this.editUsernameComplete(user));
 
-function run(){
-    view.loadUser(model);
-    doPolling(function(chunk){
-        model.token = chunk.token;
-        if(chunk.messages.length !== 0) {
-            model.syncHistory(chunk.messages);
-            view.render(model);
-        }
-    });
-}
-
-function sendMsg(newMsg){
-    if(newMsg.length == 0) return;
-    view.render(model.state.sending);
-    var newMessage = model.theMessage(newMsg);
-    client.postMessage(model.mainUrl, newMessage, function () {
-        view.render(model.state.finishSending);
-    }, function (error) {
-        errorHandler(error);
-    });
-}
-
-function editMsgComplete(id, text){
-    var updatedMessage = {
-        id: id,
-        text: text,
-        user: model.user
-    };
-    client.editMessage(model.mainUrl, updatedMessage, function () {
-        view.render(model.state.completeEditing);
-    }, function (error) {
-        errorHandler(error);
-    });
-}
-
-function deleteMsg(id){
-    client.deleteMessage(model.mainUrl, id, function () {
-        view.render(model.state.completeDeleting)
-    }, function (error) {
-        errorHandler(error);
-    });
-}
-
-function doPolling(callback){
-    function loop(){
-        client.getHistory(model.mainUrl, model.token, function (response) {
-            var answer = JSON.parse(response);
-            callback(answer);
-            setTimeout(loop, 1000);
-        });
+        window.onerror = (err)=> {
+            // output(err.toString());
+        };
     }
-    loop();
-}
 
-function editUsernameComplete(user){
-    model.user = user;
-    view.loadUser(model);
-}
+    App.prototype.run = function () {
+        this.view.render(this.model);
+        this.doPolling((chunk)=> {
+            if (this.model.syncHistory(chunk.token, chunk.messages)) {
+                this.view.render(this.model);
+            }
+        });
+    };
 
-function errorHandler(error) {
-    console.error(error);
-}
-window.onerror = function(err) {
-    errorHandler(err);
-};
+    App.prototype.doPolling = function (callback) {
+        let loop = ()=> {
+            this.client.getHistory(this.model.mainUrl, this.model.token, (response) => {
+                let answer = JSON.parse(response);
 
-function changeServer(){}
+                callback(answer);
+                setTimeout(loop, 1000);
+            },(error)=> {
+                this.errorHandler(error);
+            });
+        };
 
-function showTypeheads(){
-   // $('.typeahead').typeahead();
-}
+        loop();
+    };
+
+    App.prototype.sendMsg = function (newMsg) {
+        if (newMsg.length == 0)
+            return;
+
+        this.model.mode = 'started';
+        this.view.render(this.model);
+        var newMessage = this.model.theMessage(newMsg);
+        this.client.postMessage(this.model.mainUrl, newMessage, () => {
+            this.model.mode = 'finishSending';
+            this.view.render(this.model);
+        }, (error)=> {
+            this.errorHandler(error);
+        });
+    };
+
+    App.prototype.editMsgComplete = function (id, text) {
+        var updatedMessage = {
+            id: id,
+            text: text,
+            user: this.model.user
+        };
+        this.client.editMessage(this.model.mainUrl, updatedMessage, ()=> {
+            this.model.mode = 'completed';
+            this.view.render(this.model);
+        }, (error)=> {
+            this.errorHandler(error);
+        });
+    };
+
+    App.prototype.deleteMsg = function (id) {
+        this.model.mode = 'started';
+        this.view.render(this.model);
+        this.client.deleteMessage(this.model.mainUrl, id,  ()=> {
+            this.model.mode = 'completed';
+            this.view.render(this.model);
+        },  (error)=> {
+            this.errorHandler(error);
+        });
+    };
+
+    App.prototype.editUsernameComplete = function (user) {
+        this.model.user = user;
+        this.model.mode = 'completed';
+        this.view.render(this.model);
+    };
+
+    App.prototype.changeServer = function () {
+    };
+
+    App.prototype.showTypeheads = function() {
+        // $('.typeahead').typeahead();
+    };
+
+    App.prototype.errorHandler = function (error) {
+        console.log('Error was occurred ' + error);
+    };
+    
+    return App;
+})();
+
+
+
+
