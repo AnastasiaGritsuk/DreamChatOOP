@@ -24,45 +24,41 @@ module.exports = (function () {
         });
     }
 
-    DocumentView.prototype.isProperElement = function(target, className){
-        return target.className === className;
+    DocumentView.prototype.isProperElement = function(element, className){
+        return element.className === className;
     };
 
-    DocumentView.prototype.getUpdatedMsgId = function (evtObj) {
-        var current = this.getCurrentMsgContainer(evtObj);
-        return current.id;
-    };
-
-    DocumentView.prototype.getUpdatedMsg = function (evtObj) {
-        var current = this.getCurrentMsgContainer(evtObj);
-        var input = current.getElementsByClassName('msg-editedText')[0];
+    DocumentView.prototype.getUpdatedMsg = function (target) {
+        var input = target.getElementsByClassName('msg-editedText')[0];
         
         return input.value;
     };
     
     DocumentView.prototype.delegateEvent = function (evtObj){
-        var target = evtObj.path[1];
-        if(evtObj.type == 'click' && this.isProperElement(target, 'icon-location-arrow')) {
+        var element = evtObj.path[1];
+        var target = this.getCurrentMsgContainer(evtObj);
+
+        if(evtObj.type == 'click' && this.isProperElement(element, 'btn sendButton')) {
             this.sendMsg();
             return;
         }
-        if(evtObj.type == 'click' && this.isProperElement(target, 'icon edit')) {
-            this.editMsgBegin(evtObj);
+        if(evtObj.type == 'click' && this.isProperElement(element, 'icon edit')) {
+            this.editMsgBegin(target);
             return;
         }
-        if(evtObj.type == 'click' && this.isProperElement(target, 'icon complete')) {
-            this.editMsgComplete(evtObj);
+        if(evtObj.type == 'click' && this.isProperElement(element, 'icon complete')) {
+            this.editMsgComplete(target);
             return;
         }
-        if(evtObj.type == 'click' && this.isProperElement(target, 'icon cancel')) {
-            this.editMsgCancel(evtObj);
+        if(evtObj.type == 'click' && this.isProperElement(element, 'icon cancel')) {
+            this.editMsgCancel(target);
             return;
         }
-        if(evtObj.type == 'click' && this.isProperElement(target, 'icon delete')) {
-            this.deleteMsg(evtObj);
+        if(evtObj.type == 'click' && this.isProperElement(element, 'icon delete')) {
+            this.deleteMsg(target);
             return;
         }
-        if(evtObj.type == 'click' && this.isProperElement(target, 'icon editOn-username')) {
+        if(evtObj.type == 'click' && this.isProperElement(element, 'icon editOn-username')) {
             this.editUsernameBegin(evtObj);
             return;
         }
@@ -72,13 +68,13 @@ module.exports = (function () {
         }
     };
 
-    DocumentView.prototype.editMsgBegin = function (evtObj){
+    DocumentView.prototype.editMsgBegin = function (target){
         this.changeSendBtnState('disabled');
-        this.setState(evtObj, 'edit');
+        this.setState(target, 'edit');
     };
 
-    DocumentView.prototype.editMsgCancel = function(evtObj){
-        this.setState(evtObj, 'new');
+    DocumentView.prototype.editMsgCancel = function(target){
+        this.setState(target, 'new');
     };
 
     DocumentView.prototype.editUsernameBegin = function(evtObj){
@@ -86,10 +82,9 @@ module.exports = (function () {
         this.inputUsername.focus();
     };
     
-    DocumentView.prototype.editMsgComplete = function (evtObj) {
-        var id = this.getUpdatedMsgId(evtObj);
-        var text = this.getUpdatedMsg(evtObj);
-        this.emit('editMsgComplete', id, text);
+    DocumentView.prototype.editMsgComplete = function (target) {
+        var text = this.getUpdatedMsg(target);
+        this.emit('editMsgComplete', target.id, text);
     };
 
     DocumentView.prototype.sendMsg = function () {
@@ -97,9 +92,8 @@ module.exports = (function () {
         this.emit('sendMsg', newMsg.trim());
     };
 
-    DocumentView.prototype.deleteMsg = function (evtObj) {
-        var id = this.getUpdatedMsgId(evtObj);
-        this.emit('deleteMsg', id);
+    DocumentView.prototype.deleteMsg = function (target) {
+        this.emit('deleteMsg', target.id);
     };
     
     DocumentView.prototype.editUsernameComplete = function (evtObj) {
@@ -197,7 +191,9 @@ module.exports = (function () {
     };
     
     DocumentView.prototype.getCurrentMsgContainer = function (evtObj) {
-        return evtObj.target.shadowRoot.children[1] || evtObj.path[2];
+        if(evtObj.target.shadowRoot)
+            return evtObj.target.shadowRoot.children[1];
+        return evtObj.path[2];
     };
 
     DocumentView.prototype.getUsernameContainer = function (evtObj) {
@@ -212,8 +208,8 @@ module.exports = (function () {
         }
     };
 
-    DocumentView.prototype.setState = function (evtObj, state) {
-        this.getCurrentMsgContainer(evtObj).dataset.state = state;
+    DocumentView.prototype.setState = function (target, state) {
+        target.dataset.state = state;
     };
     
     DocumentView.prototype.getUsername = function () {
