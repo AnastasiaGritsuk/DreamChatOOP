@@ -10,6 +10,7 @@ module.exports = (function () {
         this.username = document.getElementById('username');
         this.sendButton = document.getElementById('sendButton');
         this.newMessageBox = document.getElementById('msgBox_textareaId');
+        this.usernameContainer = document.getElementById('usernameContainer');
         document.addEventListener('DOMContentLoaded', ()=>{
             this.emit('ready');
         });
@@ -24,16 +25,6 @@ module.exports = (function () {
         });
     }
 
-    DocumentView.prototype.isProperElement = function(element, className){
-        return element.className === className;
-    };
-
-    DocumentView.prototype.getUpdatedMsg = function (target) {
-        var input = target.getElementsByClassName('msg-editedText')[0];
-        
-        return input.value;
-    };
-    
     DocumentView.prototype.delegateEvent = function (evtObj){
         var element = evtObj.path[1];
         var target = this.getCurrentMsgContainer(evtObj);
@@ -59,32 +50,17 @@ module.exports = (function () {
             return;
         }
         if(evtObj.type == 'click' && this.isProperElement(element, 'icon editOn-username')) {
-            this.editUsernameBegin(evtObj);
+            this.editUsernameBegin();
             return;
         }
-        if(evtObj.type == 'click' && this.isProperElement(target, 'icon editOff-username')) {
-            this.editUsernameComplete(evtObj);
+        if(evtObj.type == 'click' && this.isProperElement(element, 'icon editOff-username')) {
+            this.editUsernameComplete();
             return;
         }
     };
 
-    DocumentView.prototype.editMsgBegin = function (target){
-        this.changeSendBtnState('disabled');
-        this.setState(target, 'edit');
-    };
-
-    DocumentView.prototype.editMsgCancel = function(target){
-        this.setState(target, 'new');
-    };
-
-    DocumentView.prototype.editUsernameBegin = function(evtObj){
-        this.setUsernameState(evtObj, 'edit');
-        this.inputUsername.focus();
-    };
-    
-    DocumentView.prototype.editMsgComplete = function (target) {
-        var text = this.getUpdatedMsg(target);
-        this.emit('editMsgComplete', target.id, text);
+    DocumentView.prototype.isProperElement = function(element, className){
+        return element.className === className;
     };
 
     DocumentView.prototype.sendMsg = function () {
@@ -92,13 +68,32 @@ module.exports = (function () {
         this.emit('sendMsg', newMsg.trim());
     };
 
+    DocumentView.prototype.editMsgBegin = function (target){
+        this.changeSendBtnState('disabled');
+        this.setState(target, 'edit');
+    };
+
+    DocumentView.prototype.editMsgComplete = function (target) {
+        var text = this.getUpdatedMsg(target);
+        this.emit('editMsgComplete', target.id, text);
+    };
+
+    DocumentView.prototype.editMsgCancel = function(target){
+        this.setState(target, 'new');
+    };
+
     DocumentView.prototype.deleteMsg = function (target) {
         this.emit('deleteMsg', target.id);
     };
-    
+
+    DocumentView.prototype.editUsernameBegin = function(){
+        this.setState(this.usernameContainer, 'edit');
+        this.inputUsername.focus();
+    };
+
     DocumentView.prototype.editUsernameComplete = function (evtObj) {
         var user = this.inputUsername.value;
-        this.setUsernameState(evtObj, 'initial');
+        this.setState(this.usernameContainer, 'initial');
         this.emit('editUsernameComplete', user);
     };
 
@@ -196,10 +191,6 @@ module.exports = (function () {
         return evtObj.path[2];
     };
 
-    DocumentView.prototype.getUsernameContainer = function (evtObj) {
-        return evtObj.path[2];
-    };
-
     DocumentView.prototype.changeSendBtnState = function (mode) {
         switch(mode) {
             case 'enabled':  this.sendButton.removeAttribute('disabled');
@@ -215,9 +206,11 @@ module.exports = (function () {
     DocumentView.prototype.getUsername = function () {
         return this.username.innerHTML;
     };
-    
-    DocumentView.prototype.setUsernameState = function (evtObj, state) {
-        this.getUsernameContainer(evtObj).dataset.state = state;
+
+    DocumentView.prototype.getUpdatedMsg = function (target) {
+        var input = target.getElementsByClassName('msg-editedText')[0];
+
+        return input.value;
     };
 
     return DocumentView;
