@@ -10,6 +10,7 @@ module.exports = (function () {
         view.on('sendMsg', (newMsg)=> this.sendMsg(newMsg));
         view.on('editMsgComplete', (id, text)=> this.editMsgComplete(id, text));
         view.on('deleteMsg', (id)=> this.deleteMsg(id));
+        view.on('editUsernameBegin', ()=>this.editUsernameBegin());
         view.on('editUsernameComplete', (user)=> this.editUsernameComplete(user));
 
         window.onerror = (err)=> {
@@ -79,6 +80,11 @@ module.exports = (function () {
         },  (error)=> {
             this.errorHandler(error);
         });
+    };
+    
+    App.prototype.editUsernameBegin = function () {
+        this.model.user.state = 'changing';
+        this.view.render({user: this.model.user});
     };
 
     App.prototype.editUsernameComplete = function (user) {

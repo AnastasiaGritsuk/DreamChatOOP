@@ -2,7 +2,10 @@
 
 module.exports = (function () {
     function AppState() {
-        this.user = 'User' + this.uniqueId(),
+        this.user = {
+            value: 'User' + this.uniqueId(),
+            state: null
+        };
         this.mainUrl =  'http://localhost:8080/chat',
         this.history = [],
         this.token =  '',        
@@ -20,7 +23,7 @@ module.exports = (function () {
         return {
             id: this.uniqueId(),
             text:text,
-            user: this.user
+            user: this.user.value
         }
     };
 

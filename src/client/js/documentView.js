@@ -87,8 +87,7 @@ module.exports = (function () {
     };
 
     DocumentView.prototype.editUsernameBegin = function(){
-        this.setState(this.usernameContainer, 'edit');
-        this.inputUsername.focus();
+        this.emit('editUsernameBegin');
     };
 
     DocumentView.prototype.editUsernameComplete = function (evtObj) {
@@ -117,10 +116,17 @@ module.exports = (function () {
     };
 
     DocumentView.prototype.renderUser = function (user) {
-        this.username.innerHTML = user;
+        if(user.state == 'changing'){
+            this.setState(this.usernameContainer, 'edit');
+            this.inputUsername.focus();
+            return;
+        }
+        this.username.innerHTML = user.value;
     };
 
     DocumentView.prototype.renderHistory = function (history) {
+        if(!history)
+            return false;
         if(history.length === 0)
             return;
         var msgMap = history.reduce(function(accumulator, msg){
