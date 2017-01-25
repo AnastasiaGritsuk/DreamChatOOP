@@ -4,7 +4,11 @@ module.exports = (function () {
     function AppState() {
         this.user = {
             value: 'User' + this.uniqueId(),
-            state: null
+            state: null,
+            set: function (_value, _state) {
+                this.value = _value;
+                this.state = _state;
+            }
         };
         this.mainUrl =  'http://localhost:8080/chat',
         this.history = [],

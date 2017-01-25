@@ -88,8 +88,7 @@ module.exports = (function () {
     };
 
     App.prototype.editUsernameComplete = function (user) {
-        this.model.user.value = user;
-        this.model.user.state = 'completed';
+        this.model.user.set(user, 'completed');
         this.view.render({user: this.model.user});
     };
 
