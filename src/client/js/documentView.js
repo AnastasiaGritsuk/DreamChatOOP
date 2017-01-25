@@ -90,9 +90,8 @@ module.exports = (function () {
         this.emit('editUsernameBegin');
     };
 
-    DocumentView.prototype.editUsernameComplete = function (evtObj) {
+    DocumentView.prototype.editUsernameComplete = function () {
         var user = this.inputUsername.value;
-        this.setState(this.usernameContainer, 'initial');
         this.emit('editUsernameComplete', user);
     };
 
@@ -120,6 +119,9 @@ module.exports = (function () {
             this.setState(this.usernameContainer, 'edit');
             this.inputUsername.focus();
             return;
+        }
+        if(user.state == 'completed'){
+            this.setState(this.usernameContainer, 'initial');
         }
         this.username.innerHTML = user.value;
     };
