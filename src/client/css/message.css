@@ -53,8 +53,7 @@
     display: inline-block;
 }
 
-.msg[data-state="new"] .msg-editedText,
-.msg[data-state="new"] .icon.complete, 
+.msg[data-state="new"] .icon.complete,
 .msg[data-state="new"] .icon.cancel{
     display: none;
 }
@@ -65,7 +64,6 @@
     display: none;    
 }
 
-.msg[data-state="edited"] .msg-editedText, 
 .msg[data-state="edited"] .icon.complete,
 .msg[data-state="edited"] .icon.cancel{
     display: none;
@@ -84,20 +82,22 @@
 }
 
 /*edit state*/
-.msg[data-state="edit"] .msg-editedText, 
-.msg[data-state="edit"] .icon.complete, 
+.msg[data-state="edit"] .icon.complete,
+.msg[data-state="edit"] .msg-text,
 .msg[data-state="edit"] .icon.cancel{
     display: inline-block;
 }
-.msg[data-state="edit"] .icon.edit, 
-.msg[data-state="edit"] .msg-text, 
+.msg[data-state="edit"] .icon.edit,
 .msg[data-state="edit"] .icon.delete{
     display: none;
 }
 
+.msg[data-state="edit"] {
+    background-color: #e1e1e1;
+}
+
 /*deleted state*/
-.msg[data-state="deleted"] .msg-editedText, 
-.msg[data-state="deleted"] .icon.edit, 
+.msg[data-state="deleted"] .icon.edit,
 .msg[data-state="deleted"] .icon.complete, 
 .msg[data-state="deleted"] .icon.delete, 
 .msg[data-state="deleted"] .icon.cancel{
