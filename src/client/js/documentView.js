@@ -64,7 +64,7 @@ module.exports = (function () {
     };
 
     DocumentView.prototype.sendMsg = function () {
-        var newMsg = this.newMessageBox.value;
+        var newMsg = this.getNewMsg();
         this.emit('sendMsg', newMsg.trim());
     };
 
@@ -222,6 +222,10 @@ module.exports = (function () {
         var input = target.getElementsByClassName('msg-editedText')[0];
 
         return input.value;
+    };
+    
+    DocumentView.prototype.getNewMsg = function () {
+        return this.newMessageBox.value;
     };
 
     return DocumentView;
