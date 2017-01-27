@@ -77,7 +77,7 @@ module.exports = (function () {
     };
 
     DocumentView.prototype.editMsgComplete = function (target) {
-        var text = this.getUpdatedMsg(target);
+        var text = this.getNewMsg();
         this.emit('editMsgComplete', target.id, text);
     };
 
