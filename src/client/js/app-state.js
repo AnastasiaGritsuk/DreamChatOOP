@@ -2,14 +2,21 @@
 var User = require('./user');
 
 module.exports = (function () {
-    function AppState(user) {
-        this.user = user;
-        this.mainUrl = 'http://localhost:8080/chat',
+    function AppState() {
+        this.user = new User('User' + this.uniqueId(), null);
+        this.mainUrl =  'http://localhost:8080/chat',
         this.history = [],
         this.token =  '',        
         this.mode = {};
     }
-    
+
+    AppState.prototype.uniqueId = function() {
+        var date = Date.now();
+        var random = Math.random() * Math.random();
+
+        return Math.floor(date * random).toString();
+    };
+
     AppState.prototype.theMessage = function(text){
         return {
             id: this.uniqueId(),
