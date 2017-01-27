@@ -8,10 +8,12 @@ module.exports = (function () {
 
         view.on('ready', ()=> this.run());
         view.on('sendMsg', (newMsg)=> this.sendMsg(newMsg));
+        view.on('editMsgBegin', ()=>this.editMsgBegin());
         view.on('editMsgComplete', (id, text)=> this.editMsgComplete(id, text));
         view.on('deleteMsg', (id)=> this.deleteMsg(id));
         view.on('editUsernameBegin', ()=>this.editUsernameBegin());
         view.on('editUsernameComplete', (user)=> this.editUsernameComplete(user));
+        
 
         window.onerror = (err)=> {
             // output(err.toString());
@@ -56,6 +58,11 @@ module.exports = (function () {
             this.errorHandler(error);
         });
     };
+    
+    App.prototype.editMsgBegin = function () {
+        this.model.currentMessage.state = 'changing';
+        this.view.render({currentMessage: this.model.currentMessage});
+    };
 
     App.prototype.editMsgComplete = function (id, text) {
         var updatedMessage = {
@@ -64,8 +71,8 @@ module.exports = (function () {
             user: this.model.user
         };
         this.client.editMessage(this.model.mainUrl, updatedMessage, ()=> {
-            this.model.mode = 'completed';
-            this.view.render(this.model);
+            this.model.currentMessage.state = 'completed';
+            this.view.render({currentMessage: this.model.currentMessage});
         }, (error)=> {
             this.errorHandler(error);
         });

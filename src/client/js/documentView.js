@@ -118,6 +118,8 @@ module.exports = (function () {
     };
 
     DocumentView.prototype.renderUser = function (user) {
+        if(!user)
+            return false;
         if(user.state == 'changing'){
             this.setState(this.usernameContainer, 'edit');
             this.inputUsername.focus();
@@ -127,6 +129,18 @@ module.exports = (function () {
             this.setState(this.usernameContainer, 'initial');
         }
         this.username.innerHTML = user.value;
+    };
+    
+    DocumentView.prototype.renderCurrentMessage = function (currentMessage) {
+        if(!currentMessage)
+            return false;
+        if(currentMessage.state == 'changing'){
+            this.changeSendBtnState('disabled');
+            return;
+        }
+        if(currentMessage.state == 'completed'){
+            this.changeSendBtnState('enabled');
+        }
     };
 
     DocumentView.prototype.renderHistory = function (history) {
@@ -147,6 +161,7 @@ module.exports = (function () {
         
         this.renderMode(modelRoot.mode);
         this.renderUser(modelRoot.user);
+        this.renderCurrentMessage(modelRoot.currentMessage);
         //this.renderServerList(modelRoot.serverList);
         this.renderHistory(modelRoot.history);
     };

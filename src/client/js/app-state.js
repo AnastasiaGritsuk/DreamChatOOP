@@ -1,5 +1,6 @@
 'use strict';
 var User = require('./user');
+var CurrentMessage = require('./currentMessage');
 
 module.exports = (function () {
     function AppState() {
@@ -8,6 +9,7 @@ module.exports = (function () {
         this.history = [],
         this.token =  '',        
         this.mode = {};
+        this.currentMessage = new CurrentMessage(null, null);
     }
 
     AppState.prototype.uniqueId = function() {
