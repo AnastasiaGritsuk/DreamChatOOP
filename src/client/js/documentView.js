@@ -98,25 +98,6 @@ module.exports = (function () {
         this.emit('editUsernameComplete', user);
     };
 
-    DocumentView.prototype.renderMode = function (mode) {
-        if(mode == 'started') {
-            if(this.sendButton.getAttribute('disabled'))
-                return;
-            this.changeSendBtnState('disabled');
-            return;
-        }
-        if(mode == 'finishSending') {
-            this.changeSendBtnState('enabled');
-            this.newMessageBox.value = '';
-            return;
-        }
-
-        if(mode == 'completed') {
-            this.changeSendBtnState('enabled');
-            return;
-        }
-    };
-
     DocumentView.prototype.renderUser = function (user) {
         if(!user)
             return false;
@@ -140,6 +121,7 @@ module.exports = (function () {
         }
         if(currentMessage.state == 'completed'){
             this.changeSendBtnState('enabled');
+            this.newMessageBox.value = '';
         }
     };
 
@@ -159,7 +141,6 @@ module.exports = (function () {
     DocumentView.prototype.render = function (modelRoot) {
         console.assert(modelRoot !== null);
         
-        this.renderMode(modelRoot.mode);
         this.renderUser(modelRoot.user);
         this.renderCurrentMessage(modelRoot.currentMessage);
         //this.renderServerList(modelRoot.serverList);

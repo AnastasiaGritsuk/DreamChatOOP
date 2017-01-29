@@ -48,12 +48,12 @@ module.exports = (function () {
         if (newMsg.length == 0)
             return;
 
-        this.model.mode = 'started';
-        this.view.render(this.model);
+        this.model.currentMessage.state = 'changing';
+        this.view.render({currentMessage: this.model.currentMessage});
         var newMessage = this.model.theMessage(newMsg);
         this.client.postMessage(this.model.mainUrl, newMessage, () => {
-            this.model.mode = 'finishSending';
-            this.view.render(this.model);
+            this.model.currentMessage.state = 'completed';
+            this.view.render({currentMessage: this.model.currentMessage});
         }, (error)=> {
             this.errorHandler(error);
         });
@@ -79,11 +79,11 @@ module.exports = (function () {
     };
 
     App.prototype.deleteMsg = function (id) {
-        this.model.mode = 'started';
-        this.view.render(this.model);
+        this.model.currentMessage.state = 'changing';
+        this.view.render({currentMessage: this.model.currentMessage});
         this.client.deleteMessage(this.model.mainUrl, id,  ()=> {
-            this.model.mode = 'completed';
-            this.view.render(this.model);
+            this.model.currentMessage.state = 'completed';
+            this.view.render({currentMessage: this.model.currentMessage});
         },  (error)=> {
             this.errorHandler(error);
         });
