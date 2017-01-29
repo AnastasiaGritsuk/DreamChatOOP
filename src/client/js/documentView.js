@@ -69,7 +69,6 @@ module.exports = (function () {
     };
 
     DocumentView.prototype.editMsgBegin = function (target){
-        this.changeSendBtnState('disabled');
         this.newMessageBox.value = target.getElementsByClassName('msg-text')[0].innerHTML;
         this.newMessageBox.focus();
         this.setState(target, 'edit');
