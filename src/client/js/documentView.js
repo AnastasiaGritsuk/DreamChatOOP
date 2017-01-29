@@ -9,7 +9,7 @@ module.exports = (function () {
         this.inputUsername = document.getElementsByClassName('icon-input')[0];
         this.username = document.getElementById('username');
         this.sendButton = document.getElementById('sendButton');
-        this.newMessageBox = document.getElementById('msgBox_textareaId');
+        this.newMessageBox = document.getElementById('msgBoxId');
         this.usernameContainer = document.getElementById('usernameContainer');
         document.addEventListener('DOMContentLoaded', ()=>{
             this.emit('ready');
