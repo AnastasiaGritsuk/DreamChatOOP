@@ -37,7 +37,7 @@ module.exports = (function () {
             this.editMsgBegin(target);
             return;
         }
-        if(evtObj.type == 'click' && this.isProperElement(element, 'icon complete')) {
+        if(evtObj.type == 'click' && evtObj.target.className == 'icon-check') {
             this.editMsgComplete(target);
             return;
         }
@@ -72,12 +72,12 @@ module.exports = (function () {
         this.newMessageBox.value = target.getElementsByClassName('msg-text')[0].innerHTML;
         this.newMessageBox.focus();
         this.setState(target, 'edit');
-        this.emit('editMsgBegin');
+        this.emit('editMsgBegin', target.id);
     };
 
-    DocumentView.prototype.editMsgComplete = function (target) {
+    DocumentView.prototype.editMsgComplete = function () {
         var text = this.getNewMsg();
-        this.emit('editMsgComplete', target.id, text);
+        this.emit('editMsgComplete', text);
     };
 
     DocumentView.prototype.editMsgCancel = function(target){

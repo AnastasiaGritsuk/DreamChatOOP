@@ -8,7 +8,7 @@ module.exports = (function () {
 
         view.on('ready', ()=> this.run());
         view.on('sendMsg', (newMsg)=> this.sendMsg(newMsg));
-        view.on('editMsgBegin', ()=>this.editMsgBegin());
+        view.on('editMsgBegin', (targetId)=>this.editMsgBegin(targetId));
         view.on('editMsgComplete', (id, text)=> this.editMsgComplete(id, text));
         view.on('deleteMsg', (id)=> this.deleteMsg(id));
         view.on('editUsernameBegin', ()=>this.editUsernameBegin());
@@ -59,14 +59,15 @@ module.exports = (function () {
         });
     };
     
-    App.prototype.editMsgBegin = function () {
+    App.prototype.editMsgBegin = function (targetId) {
         this.model.currentMessage.state = 'changing';
+        this.model.currentMessage.target = targetId;
         this.view.render({currentMessage: this.model.currentMessage});
     };
 
-    App.prototype.editMsgComplete = function (id, text) {
+    App.prototype.editMsgComplete = function (text) {
         var updatedMessage = {
-            id: id,
+            id: this.model.currentMessage.target,
             text: text,
             user: this.model.user
         };
