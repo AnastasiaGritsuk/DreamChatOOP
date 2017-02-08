@@ -373,3 +373,25 @@ a {
   line-height: 60px;
   height: 60px;
 }
+
+/* line 53, D:/Dream/DreamChatOOP/src/client/scss/_msgBox.scss */
+.actions {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -15px;
+}
+/* line 60, D:/Dream/DreamChatOOP/src/client/scss/_msgBox.scss */
+.actions.active {
+  display: block;
+}
+
+/* line 66, D:/Dream/DreamChatOOP/src/client/scss/_msgBox.scss */
+.msgBox[data-state="edit"] .actions {
+  display: block;
+}
+/* line 70, D:/Dream/DreamChatOOP/src/client/scss/_msgBox.scss */
+.msgBox[data-state="edit"] .sendButton {
+  display: none;
+}

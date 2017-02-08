@@ -11,6 +11,7 @@ module.exports = (function () {
         this.sendButton = document.getElementById('sendButton');
         this.newMessageBox = document.getElementById('msgBoxId');
         this.usernameContainer = document.getElementById('usernameContainer');
+        this.msgBox = document.getElementsByClassName('msgBox')[0];
         document.addEventListener('DOMContentLoaded', ()=>{
             this.emit('ready');
         });
@@ -41,7 +42,7 @@ module.exports = (function () {
             this.editMsgComplete(target);
             return;
         }
-        if(evtObj.type == 'click' && this.isProperElement(element, 'icon cancel')) {
+        if(evtObj.type == 'click' && evtObj.target.className == 'icon-remove-circle') {
             this.editMsgCancel(target);
             return;
         }
@@ -72,11 +73,13 @@ module.exports = (function () {
         this.newMessageBox.value = target.getElementsByClassName('msg-text')[0].innerHTML;
         this.newMessageBox.focus();
         this.setState(target, 'edit');
+        this.setState(this.msgBox, 'edit');
         this.emit('editMsgBegin', target.id);
     };
 
     DocumentView.prototype.editMsgComplete = function () {
         var text = this.getNewMsg();
+        this.setState(this.msgBox, 'initial')
         this.emit('editMsgComplete', text);
     };
 

@@ -49,3 +49,28 @@
     line-height: 60px;
     height: 60px;
 }
+
+.actions {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -15px;
+
+    &.active {
+        display: block;
+    }
+}
+
+.msgBox[data-state="edit"] {
+    .actions {
+        display: block;
+    }
+
+    .sendButton {
+        display: none;
+    }
+}
+
+
+
