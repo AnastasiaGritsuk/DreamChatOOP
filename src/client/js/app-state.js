@@ -8,7 +8,6 @@ module.exports = (function () {
         this.mainUrl =  'http://localhost:8080/chat',
         this.history = [],
         this.token =  '',        
-        this.mode = {};
         this.currentMessage = new CurrentMessage(null, null);
     }
 
