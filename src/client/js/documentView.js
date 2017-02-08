@@ -12,6 +12,8 @@ module.exports = (function () {
         this.newMessageBox = document.getElementById('msgBoxId');
         this.usernameContainer = document.getElementById('usernameContainer');
         this.msgBox = document.getElementsByClassName('msgBox')[0];
+        this.targetMsg = null;
+        
         document.addEventListener('DOMContentLoaded', ()=>{
             this.emit('ready');
         });
@@ -72,6 +74,7 @@ module.exports = (function () {
     DocumentView.prototype.editMsgBegin = function (target){
         this.newMessageBox.value = target.getElementsByClassName('msg-text')[0].innerHTML;
         this.newMessageBox.focus();
+        this.targetMsg = target;
         this.setState(target, 'edit');
         this.setState(this.msgBox, 'edit');
         this.emit('editMsgBegin', target.id);
@@ -84,7 +87,10 @@ module.exports = (function () {
     };
 
     DocumentView.prototype.editMsgCancel = function(target){
-        this.setState(target, 'new');
+        this.setState(this.targetMsg, 'new');
+        this.setState(this.msgBox, 'initial');
+        this.newMessageBox.value = '';
+        this.emit('editMsgCancel');
     };
 
     DocumentView.prototype.deleteMsg = function (target) {

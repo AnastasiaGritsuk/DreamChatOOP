@@ -13,7 +13,7 @@ module.exports = (function () {
         view.on('deleteMsg', (id)=> this.deleteMsg(id));
         view.on('editUsernameBegin', ()=>this.editUsernameBegin());
         view.on('editUsernameComplete', (user)=> this.editUsernameComplete(user));
-        
+        view.on('editMsgCancel', (user)=> this.editMsgCancel());
 
         window.onerror = (err)=> {
             // output(err.toString());
@@ -77,6 +77,11 @@ module.exports = (function () {
         }, (error)=> {
             this.errorHandler(error);
         });
+    };
+    
+    App.prototype.editMsgCancel = function () {
+        this.model.currentMessage.state = 'completed';
+        this.view.render({currentMessage: this.model.currentMessage});
     };
 
     App.prototype.deleteMsg = function (id) {
