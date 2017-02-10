@@ -13,8 +13,8 @@ module.exports = (function () {
         this.state = 'completed';
     };
 
-    Value.prototype.isReady = function () {
-        return this.state == 'completed';
+    Value.prototype.isChanging = function () {
+        return this.state == 'changing';
     };
     
     return Value;
