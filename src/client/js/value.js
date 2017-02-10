@@ -1,20 +1,20 @@
 module.exports = (function () {
-    function Value(value, state) {
+    function Value(value, ready) {
         this.value = value;
-        this.state = state;
+        this.ready = ready;
     }
 
     Value.prototype.changing = function () {
-        this.state = 'changing';
+        this.ready = false;
     };
 
-    Value.prototype.completed = function (text) {
-        this.value = text;
-        this.state = 'completed';
+    Value.prototype.completed = function (value) {
+        this.value = value;
+        this.ready = true;
     };
 
-    Value.prototype.isChanging = function () {
-        return this.state == 'changing';
+    Value.prototype.isCompleted = function () {
+        return this.ready;
     };
     
     return Value;

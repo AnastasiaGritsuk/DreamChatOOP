@@ -4,7 +4,7 @@ var CurrentMessage = require('./currentMessage');
 
 module.exports = (function () {
     function AppState() {
-        this.user = new User('User' + this.uniqueId(), null);
+        this.user = new User('User' + this.uniqueId(), true);
         this.mainUrl =  'http://localhost:8080/chat',
         this.history = [],
         this.token =  '',        

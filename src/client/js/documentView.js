@@ -111,12 +111,12 @@ module.exports = (function () {
     DocumentView.prototype.renderUser = function (user) {
         if(!user)
             return false;
-        if(user.isChanging()){
-            this.setState(this.usernameContainer, 'edit');
-            this.inputUsername.focus();
-        } else {
+        if(user.isCompleted()){
             this.setState(this.usernameContainer, 'initial');
             this.username.innerHTML = user.value;
+        } else {
+            this.setState(this.usernameContainer, 'edit');
+            this.inputUsername.focus();
         }
     };
     
