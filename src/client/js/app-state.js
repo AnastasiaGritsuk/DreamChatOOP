@@ -1,5 +1,5 @@
 'use strict';
-var User = require('./user');
+var User = require('./value');
 var CurrentMessage = require('./currentMessage');
 
 module.exports = (function () {

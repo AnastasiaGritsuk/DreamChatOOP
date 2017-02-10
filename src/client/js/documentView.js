@@ -36,6 +36,16 @@ module.exports = (function () {
             this.sendMsg();
             return;
         }
+
+        if(evtObj.type == 'click' && this.isProperElement(element, 'icon editOn-username')) {
+            this.editUsernameBegin();
+            return;
+        }
+        if(evtObj.type == 'click' && this.isProperElement(element, 'icon editOff-username')) {
+            this.editUsernameComplete();
+            return;
+        }
+
         if(evtObj.type == 'click' && this.isProperElement(element, 'icon edit')) {
             this.editMsgBegin(target);
             return;
@@ -50,14 +60,6 @@ module.exports = (function () {
         }
         if(evtObj.type == 'click' && this.isProperElement(element, 'icon delete')) {
             this.deleteMsg(target);
-            return;
-        }
-        if(evtObj.type == 'click' && this.isProperElement(element, 'icon editOn-username')) {
-            this.editUsernameBegin();
-            return;
-        }
-        if(evtObj.type == 'click' && this.isProperElement(element, 'icon editOff-username')) {
-            this.editUsernameComplete();
             return;
         }
     };
