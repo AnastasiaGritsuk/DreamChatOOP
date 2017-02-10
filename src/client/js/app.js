@@ -96,12 +96,12 @@ module.exports = (function () {
     };
     
     App.prototype.editUsernameBegin = function () {
-        this.model.user.state = 'changing';
+        this.model.user.set('changing', undefined);
         this.view.render({user: this.model.user});
     };
 
     App.prototype.editUsernameComplete = function (user) {
-        this.model.user.set(user, 'completed');
+        this.model.user.set('completed', user);
         this.view.render({user: this.model.user});
     };
 
