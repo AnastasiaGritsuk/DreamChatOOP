@@ -4,11 +4,17 @@ module.exports = (function () {
         this.state = _state;
     }
 
-    Value.prototype.set = function (_state, _value) {
-        if(_value !== undefined) {
-            this.value = _value;
-        }
-        this.state = _state;
+    Value.prototype.changing = function () {
+        this.state = 'changing';
+    };
+
+    Value.prototype.completed = function (text) {
+        this.value = text;
+        this.state = 'completed';
+    };
+
+    Value.prototype.isReady = function () {
+        return this.state == 'completed';
     };
     
     return Value;
