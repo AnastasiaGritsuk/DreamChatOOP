@@ -79,7 +79,7 @@ module.exports = (function () {
         this.targetMsg = target;
         this.setState(target, 'edit');
         this.setState(this.msgBox, 'edit');
-        this.emit('editMsgBegin', target.id);
+        this.emit('editMsgBegin', this.targetMsg);
     };
 
     DocumentView.prototype.editMsgComplete = function () {
@@ -96,7 +96,7 @@ module.exports = (function () {
     };
 
     DocumentView.prototype.deleteMsg = function (target) {
-        this.emit('deleteMsg', target.id);
+        this.emit('deleteMsg', target);
     };
 
     DocumentView.prototype.editUsernameBegin = function(){
@@ -121,15 +121,11 @@ module.exports = (function () {
     };
     
     DocumentView.prototype.renderCurrentMessage = function (currentMessage) {
-        if(!currentMessage)
-            return false;
-        if(currentMessage.state == 'changing'){
-            this.changeSendBtnState('disabled');
-            return;
-        }
-        if(currentMessage.state == 'completed'){
+        if(currentMessage === null){
             this.changeSendBtnState('enabled');
             this.newMessageBox.value = '';
+        } else {
+            this.changeSendBtnState('disabled');
         }
     };
 

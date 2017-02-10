@@ -1,6 +1,5 @@
 'use strict';
 var User = require('./value');
-var CurrentMessage = require('./currentMessage');
 
 module.exports = (function () {
     function AppState() {
@@ -8,7 +7,7 @@ module.exports = (function () {
         this.mainUrl =  'http://localhost:8080/chat',
         this.history = [],
         this.token =  '',        
-        this.currentMessage = new CurrentMessage(null, null);
+        this.currentMessage = null;
     }
 
     AppState.prototype.uniqueId = function() {

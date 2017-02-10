@@ -48,31 +48,30 @@ module.exports = (function () {
         if (newMsg.length == 0)
             return;
 
-        this.model.currentMessage.state = 'changing';
+        this.model.currentMessage = newMsg;
         this.view.render({currentMessage: this.model.currentMessage});
         var newMessage = this.model.theMessage(newMsg);
         this.client.postMessage(this.model.mainUrl, newMessage, () => {
-            this.model.currentMessage.state = 'completed';
+            this.model.currentMessage = null;
             this.view.render({currentMessage: this.model.currentMessage});
         }, (error)=> {
             this.errorHandler(error);
         });
     };
     
-    App.prototype.editMsgBegin = function (targetId) {
-        this.model.currentMessage.state = 'changing';
-        this.model.currentMessage.target = targetId;
+    App.prototype.editMsgBegin = function (target) {
+        this.model.currentMessage = target;
         this.view.render({currentMessage: this.model.currentMessage});
     };
 
     App.prototype.editMsgComplete = function (text) {
         var updatedMessage = {
-            id: this.model.currentMessage.target,
+            id: this.model.currentMessage.id,
             text: text,
             user: this.model.user
         };
         this.client.editMessage(this.model.mainUrl, updatedMessage, ()=> {
-            this.model.currentMessage.state = 'completed';
+            this.model.currentMessage = null;
             this.view.render({currentMessage: this.model.currentMessage});
         }, (error)=> {
             this.errorHandler(error);
@@ -80,15 +79,15 @@ module.exports = (function () {
     };
     
     App.prototype.editMsgCancel = function () {
-        this.model.currentMessage.state = 'completed';
+        this.model.currentMessage = null;
         this.view.render({currentMessage: this.model.currentMessage});
     };
 
-    App.prototype.deleteMsg = function (id) {
-        this.model.currentMessage.state = 'changing';
+    App.prototype.deleteMsg = function (target) {
+        this.model.currentMessage = target;
         this.view.render({currentMessage: this.model.currentMessage});
-        this.client.deleteMessage(this.model.mainUrl, id,  ()=> {
-            this.model.currentMessage.state = 'completed';
+        this.client.deleteMessage(this.model.mainUrl, target.id,  ()=> {
+            this.model.currentMessage.state = null;
             this.view.render({currentMessage: this.model.currentMessage});
         },  (error)=> {
             this.errorHandler(error);
