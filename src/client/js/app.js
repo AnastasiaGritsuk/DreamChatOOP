@@ -100,8 +100,8 @@ module.exports = (function () {
         this.view.render({user: this.model.user});
     };
 
-    App.prototype.editUsernameComplete = function (user) {
-        this.model.user.completed(user);
+    App.prototype.editUsernameComplete = function (userName) {
+        this.model.user.completed(userName);
         this.view.render({user: this.model.user});
     };
 
