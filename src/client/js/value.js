@@ -1,7 +1,7 @@
 module.exports = (function () {
-    function Value(_value, _state) {
-        this.value = _value;
-        this.state = _state;
+    function Value(value, state) {
+        this.value = value;
+        this.state = state;
     }
 
     Value.prototype.changing = function () {
